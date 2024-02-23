@@ -1,0 +1,9 @@
+
+from maps.models import *
+
+hoa = Location(name="Hall of Arts", lat=40.4409058, lng=-79.94249)
+
+hoa1 = Floor(location=hoa, name="Floor 1", img_path="hallofarts1.png")
+
+hoa.save()
+hoa1.save()
