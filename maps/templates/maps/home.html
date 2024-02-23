@@ -1,0 +1,22 @@
+{% extends "maps/base.html" %}
+
+{% block title %}Scotty Maps{% endblock %}
+
+{% block scripts %}
+<script src="../../static/maps/home.js"></script>
+<link rel="stylesheet" href="../../static/maps/home.css">
+{% endblock %}
+
+{% block header %}
+{% include "maps/subtemplates/header.html" with disable_header="true" %}
+{% endblock %}
+
+
+{% block body %}
+
+
+  <div id="map"></div>
+
+
+
+{% endblock %}

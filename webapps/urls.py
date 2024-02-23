@@ -16,7 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+import maps.views as map_views
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    
+    # webapp pages:
+    path('', map_views.home, name="home"),
+    path('building/<str:building_name>', map_views.building, name="building"),
 ]
