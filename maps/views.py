@@ -12,11 +12,6 @@ def home(request):
     return render(request, "maps/home.html")
 
 
-def building(request, building_name):
-    print(building_name)
-    return render(request, "maps/home_old.html")
-
-
 def floor(request, floor_id):
     context=dict()
 

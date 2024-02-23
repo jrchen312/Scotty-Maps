@@ -24,7 +24,6 @@ urlpatterns = [
     
     # webapp pages:
     path('', map_views.home, name="home"),
-    path('building/<str:building_name>', map_views.building, name="building"),
     path('floor/<int:floor_id>', map_views.floor, name="floor"),
 
     # endpoints: 
