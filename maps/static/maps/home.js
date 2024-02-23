@@ -40,29 +40,55 @@ async function initMap() {
   });
 
   // Markers
-  const hoaPos = { lat: 40.4409058, lng: -79.94249 };
+  $.get("/get_map_pins", function(data, status) {
+    // console.log("Data: " + JSON.parse(data) + "\nStatus: " + status);
+    let json_data = JSON.parse(data);
 
-  contentString = `<a href="/building/hallofarts">Hall of Arts</a>
-  `;
+    for (let i = 0; i < json_data.length; i=i+1) {
+      let loc = json_data[i];
 
-  const infowindow = new google.maps.InfoWindow({
-    content: contentString,
-    ariaLabel: "Hall of Arts",
+      let floorString = ``;
+
+      for (let k = 0; k < loc.floors.length; k=k+1) {
+        floorString += `
+        <p class="card_text">
+          <a href="${loc.floors[k].img_path}">${loc.floors[k].name}</a>
+        </p>
+        `;
+      }
+
+      const contentString = `
+        <div class="card-body">
+          <h5 class="card-title">${loc.name}</h5>
+
+          ${floorString}
+        </div>
+      `;
+
+      const pos = { lat : loc.lat, lng : loc.lng };
+
+      const infowindow = new google.maps.InfoWindow({
+        content: contentString,
+        ariaLabel: loc.name,
+      });
+
+      const marker = new AdvancedMarkerElement({
+        map: map,
+        position: pos,
+        title: loc.name
+      });
+
+      marker.addListener("click", () => {
+        infowindow.open({
+          anchor: marker,
+          map,
+        });
+      });
+
+    }
+
   });
 
-  const marker = new AdvancedMarkerElement({
-    map: map,
-    position: hoaPos,
-    title: "Hall of Arts",
-  });
-
-  marker.addListener("click", () => {
-    infowindow.open({
-      anchor: marker,
-      map,
-    });
-  });
 }
 
 
-// initMap();
