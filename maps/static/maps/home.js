@@ -1,10 +1,27 @@
-// Google map handler: 
-(g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
-  key: "AIzaSyBoIFr6oHJ7DHYKTzjMZzJmFBCc-Ill2U0",
-  v: "weekly",
-  mapId: "c8d02a78f31968ed",
-  // Use the 'v' parameter to indicate the version to use (weekly, beta, alpha, etc.).
-});
+// // Google map handler: 
+// (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+//   key: ":(",
+//   v: "weekly",
+//   mapId: "c8d02a78f31968ed",
+//   // Use the 'v' parameter to indicate the version to use (weekly, beta, alpha, etc.).
+// });
+
+// use proxy on webserver to load google maps...
+function loadMapsScript() {
+  fetch('/get_maps_script')  // Proxy url endpoint
+      .then(response => response.text())
+      .then(scriptContent => {
+          const script = document.createElement('script');
+          script.innerHTML = scriptContent; // Set the script content dynamically
+          document.head.appendChild(script);
+      })
+      .then(initMap())
+      .catch(error => console.error('Error loading Maps script:', error));
+}
+
+// Call to load the Maps script:
+loadMapsScript(); 
+
 
 // Initialize and add the map
 let map;
@@ -48,4 +65,4 @@ async function initMap() {
 }
 
 
-initMap();
+// initMap();

@@ -25,4 +25,7 @@ urlpatterns = [
     # webapp pages:
     path('', map_views.home, name="home"),
     path('building/<str:building_name>', map_views.building, name="building"),
+
+    # endpoints: 
+    path('get_maps_script', map_views.get_maps_script),
 ]
