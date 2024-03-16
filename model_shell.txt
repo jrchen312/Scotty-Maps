@@ -1,9 +1,17 @@
 
 from maps.models import *
 
+# HALL OF ARTS
 hoa = Location(name="Hall of Arts", lat=40.4409058, lng=-79.94249)
-
 hoa1 = Floor(location=hoa, name="Floor 1", img_path="hallofarts1.png")
 
 hoa.save()
 hoa1.save()
+
+
+# Blank square for testing
+test_room = Location(name="Table", lat=40.4422053, lng=-79.9470091)
+test_room1 = Floor(location=test_room, name="Table 1", img_path="300pxSquare.png")
+
+test_room.save()
+test_room1.save()

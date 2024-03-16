@@ -1,25 +1,35 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
+from django.views.decorators.csrf import csrf_exempt 
 from django.urls import reverse
 from .models import *
 
 import requests
-import os
 from configparser import ConfigParser
 
+################################################################################
+# HTML views
+################################################################################
 
+# Home View displaying a map
 def home(request):
     return render(request, "maps/home.html")
 
 
+# Floor View displaying a floor of a building. 
 def floor(request, floor_id):
-    context=dict()
+    context = dict()
 
     floor = Floor.objects.get(id=floor_id)
     
     context["img_file"] = floor.img_path
 
     return render(request, "maps/floor.html", context=context)
+
+
+################################################################################
+# Asynchronous points
+################################################################################
 
 # Proxy point to load the google maps API from the server. 
 def get_maps_script(request):
@@ -58,3 +68,46 @@ def get_map_pins(request):
         info.append(i)
     
     return JsonResponse(info, safe=False, content_type="application/javascript")
+
+"""
+Update the user location for a "floor". 
+
+"""
+@csrf_exempt
+def update_user_location(request):
+    if request.method == 'POST':
+        data = request.POST
+        print(data)
+
+        try:
+            tag = Tag.objects.get(id=data["id"])
+            print("tag found")
+        except:
+            tag = Tag.objects.create(id=data["id"])
+            print("created new tag")
+        
+        tag.x_pos = data["x_pos"]
+        tag.y_pos = data["y_pos"]
+
+        tag.floor = Floor.objects.get(id=data["floor"])
+
+        tag.save()
+        return JsonResponse({'message': 'Data received!'})
+    else:
+        return JsonResponse({'error': 'Only POST requests allowed.'})
+
+
+USER_TAG = "http_test"
+"""
+For the "TEST
+"""
+def get_user_location(request):
+    try:
+        tag = Tag.objects.get(id=USER_TAG)
+    except:
+        return JsonResponse({'error': 'Only POST requests allowed.'})
+
+    return JsonResponse({
+        'x_pos': tag.x_pos,
+        'y_pos': tag.y_pos
+    })

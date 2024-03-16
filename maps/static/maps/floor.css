@@ -1,0 +1,34 @@
+
+#mapContainer {
+    position: relative; 
+    width: 100%;
+    height: calc(100vh - 56px); /* 56 px being height of header */
+    overflow: hidden;
+}
+
+#floorImg {
+    position: absolute;
+}
+
+#userPos {
+    position: absolute;
+    visibility: hidden; 
+
+    width: 20px; /* width and height don't do anything */
+    height: 30px;
+    
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 30px solid red;
+
+    z-index: 20;
+}
+
+
+/* div to hold the user paths */
+#userPaths {
+    position: absolute;
+    user-select: none;   /* don't let the user select it. */
+
+    z-index: 10;
+}

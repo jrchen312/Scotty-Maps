@@ -29,4 +29,8 @@ urlpatterns = [
     # endpoints: 
     path('get_maps_script', map_views.get_maps_script),
     path('get_map_pins', map_views.get_map_pins),
+
+    path('update_user_location', map_views.update_user_location), 
+    path('get_user_location', map_views.get_user_location),
+    
 ]
