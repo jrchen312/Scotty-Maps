@@ -10,6 +10,11 @@ let userX = 776;
 let movingUp = true;
 let rotation = 0;
 
+
+// garner more statistics:
+let num_received = 0;
+let total_delay = 0;
+
 $(document).ready(function(){
     var floorImg = $( "#floorImg" );
 
@@ -22,12 +27,15 @@ $(document).ready(function(){
             success: function(data) {
                 // console.log("User Location:", data);
 
-                // Display the recorded position... 
                 const user_x = data.x_pos * $("#floorImg").width();
                 const user_y = data.y_pos * $("#floorImg").height();
 
                 // console.log(data.x_pos, data.y_pos, user_x, user_y);
-                console.log(`Time elapsed: ${Date.now()/1000 - data.time}`);
+                const delay = Date.now()/1000 - data.time;
+
+                total_delay += delay;
+                const avg = total_delay / (++num_received);
+                console.log(`Time elapsed(${delay}), total(${avg})`);
 
                 changeImgPos(user_x, user_y, 0);
             },
