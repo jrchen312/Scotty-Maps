@@ -20,7 +20,7 @@ $(document).ready(function(){
             type: 'GET',  // Specify the HTTP method
             dataType: 'json',  // Expect a JSON response from the server
             success: function(data) {
-                console.log("User Location:", data);
+                // console.log("User Location:", data);
 
                 // Display the recorded position... 
                 const user_x = data.x_pos * $("#floorImg").width();

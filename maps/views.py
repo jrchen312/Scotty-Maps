@@ -77,11 +77,11 @@ Update the user location for a "floor".
 def update_user_location(request):
     if request.method == 'POST':
         data = request.POST
-        print(data)
+        # print(data)
 
         try:
             tag = Tag.objects.get(id=data["id"])
-            print("tag found")
+            # print("tag found")
         except:
             tag = Tag.objects.create(id=data["id"])
             print("created new tag")
