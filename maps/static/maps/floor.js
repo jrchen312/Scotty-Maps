@@ -16,7 +16,7 @@ $(document).ready(function(){
     // get the user position using http request
     function getUserLocation() {
         $.ajax({
-            url: 'http://127.0.0.1:8000/get_user_location',
+            url: 'http://3.90.105.209:8000/get_user_location',
             type: 'GET',  // Specify the HTTP method
             dataType: 'json',  // Expect a JSON response from the server
             success: function(data) {
