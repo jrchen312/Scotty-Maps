@@ -4,6 +4,7 @@ import random
 
 
 url = 'http://127.0.0.1:8000/update_user_location'
+url = 'http://3.90.105.209:8000/update_user_location'
 
 
 
