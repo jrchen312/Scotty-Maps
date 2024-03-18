@@ -13,12 +13,14 @@ for _ in range(1000):
     time.sleep(1)
 
     data = {
-        'id': 'http_test', 
+        'id': 'http_test',          # id of the tag device (keep as "http_test")
         # 'x_pos': 0.3406, 
         # 'y_pos': 0.2959,
-        'x_pos': random.random(), 
-        'y_pos': random.random(),
-        "floor": 1
+        'x_pos': random.random(),   # x position in [0, 1]
+        'y_pos': random.random(),   # y position in [0, 1]
+        'floor': 1,                 # "floor id" (keep as "1" for test square)
+
+        'time': time.time(),        # time for benchmarking purposes. 
     }
 
 

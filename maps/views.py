@@ -91,6 +91,8 @@ def update_user_location(request):
 
         tag.floor = Floor.objects.get(id=data["floor"])
 
+        tag.last_update_time = data["time"]
+
         tag.save()
         return JsonResponse({'message': 'Data received!'})
     else:
@@ -109,5 +111,6 @@ def get_user_location(request):
 
     return JsonResponse({
         'x_pos': tag.x_pos,
-        'y_pos': tag.y_pos
+        'y_pos': tag.y_pos,
+        'time': tag.last_update_time,
     })

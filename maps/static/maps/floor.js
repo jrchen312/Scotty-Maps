@@ -25,7 +25,9 @@ $(document).ready(function(){
                 // Display the recorded position... 
                 const user_x = data.x_pos * $("#floorImg").width();
                 const user_y = data.y_pos * $("#floorImg").height();
-                console.log(data.x_pos, data.y_pos, user_x, user_y);
+
+                // console.log(data.x_pos, data.y_pos, user_x, user_y);
+                console.log(`Time elapsed: ${Date.now()/1000 - data.time}`);
 
                 changeImgPos(user_x, user_y, 0);
             },

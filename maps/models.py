@@ -53,3 +53,5 @@ class Tag(models.Model):
         related_name="tags",
         null=True
     )
+
+    last_update_time = models.FloatField(null=True, blank=True)
