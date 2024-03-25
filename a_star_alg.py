@@ -30,7 +30,7 @@ def return_path(node):
 
 def a_star_heuristic(end, node):
     h = (end.position[0] - node.position[0]) ** 2 + (end.position[1] - node.position[1]) ** 2
-    return (h)
+    return (h)**(0.5)
 
 def a_star(graph, start, end):
     rows = len(graph)
@@ -64,21 +64,26 @@ def a_star(graph, start, end):
             nc = dc + node.position[1]
 
             # workable if in bounds, etc.
-            if (0 <= nr < rows) and (0 <= nc < cols) and (graph[nr][nc] == 0):
+            if (0 <= nr < rows) and (0 <= nc < cols) and (graph[nr][nc] == 0) and ((nr, nc) not in closed_set):
                 child_nodes.append(Node(parent=node, position=(nr, nc)))
         
         # work through child nodes
         for child in child_nodes:
-            if (child.position in closed_set):
-                continue
-
+            # compute f, g, h for the child node
             child.g = node.g + 1
             child.h = a_star_heuristic(end_node, child)
             child.f = child.g + child.h
-
-            # only add to open_heap if it will be better. 
-            if len([open_node for open_node in open_heap if child == open_node and child > open_node]) == 0:
-                heapq.heappush(open_heap, child)
             
+            # if child already exists on the heap, merge nodes
+            # idx = open_heap.index(child)
+            if child in open_heap: 
+                idx = open_heap.index(child) 
+                
+                if (child.g < open_heap[idx].g):
+                   open_heap[idx] = child
+            else:
+                # Add the child to the open list
+                heapq.heappush(open_heap, child)
     return None
+
 
