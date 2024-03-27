@@ -49,7 +49,7 @@ def update_user_position():
 
 
 for _ in range(1000):
-    time.sleep(0.4)
+    time.sleep(0.3)
     update_user_position()
 
     

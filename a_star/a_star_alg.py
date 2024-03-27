@@ -1,5 +1,7 @@
 import heapq
 import time
+import json
+from PIL import Image, ImageDraw
 
 a_star_dirs = [(0, 1), (0, -1) , (1, 0), (-1, 0), (1, 1), (1, -1), (-1, 1), (-1, -1)]
 
@@ -86,4 +88,42 @@ def a_star(graph, start, end):
                 heapq.heappush(open_heap, child)
     return None
 
+def load_graph_from_json(filename="graph.json"):
+    with open(filename, "r") as file:
+        return json.load(file)
 
+
+def save_path_as_image(graph, path):
+    width = len(graph[0])
+    height = len(graph)
+
+    for p in path:
+        graph[p[0]][p[1]] = 10
+
+    # visualize the graph to make sure it's correct. 
+    image = Image.new('RGB', (width, height), color='white')
+    draw = ImageDraw.Draw(image)
+
+    for y in range(len(graph)):
+        for x in range(len(graph[y])):
+            color = "green" if graph[y][x] == 10 else "white" 
+            draw.rectangle([x, y, x + 1, y + 1], fill=color)
+
+    image.save("graph.png")
+
+# runs pretty fast, <0.04 seconds
+def hoa_example():
+    graph = load_graph_from_json("graph.json")
+
+    start = (1088, 313)
+    end = (250, 781)
+
+    a = time.time()
+    path = a_star(graph, start, end)
+    b = time.time()
+    print(b-a)
+
+    print(f"len({len(path)})")
+    save_path_as_image(graph, path)
+    
+hoa_example()
