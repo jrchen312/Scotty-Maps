@@ -6,6 +6,19 @@
     overflow: hidden;
 }
 
+#floorHeader {
+    position: absolute;
+    /* left: 10px;
+    top: 10px; */
+    z-index: 30;
+
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+
+    width: calc(100vw - 20px);
+}
+
 #floorImg {
     position: absolute;
 }

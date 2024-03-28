@@ -47,6 +47,8 @@ class Tag(models.Model):
     x_pos = models.FloatField(null=True, blank=True)
     y_pos = models.FloatField(null=True, blank=True)
 
+    rotation = models.FloatField(null=True, blank=True)
+
     floor = models.ForeignKey(
         Floor,
         on_delete=models.CASCADE,

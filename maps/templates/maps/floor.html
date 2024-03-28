@@ -13,14 +13,48 @@
 
 
 {% block body %}
+
+{{ tagId|json_script:"tag-id"}}
+
 <div id="mapContainer">
+    <!-- header for inputting location, showign direction  -->
+    <div id="floorHeader" class="card">
+        <div class="card-body">
+            <form>
+                <label for="exampleDataList" class="form-label">Enter Location</label>
+                
+                <div class="input-group">
+                    <input class="form-control" list="datalistOptions" id="roomInput" placeholder="Type to search...">
+                    <datalist id="datalistOptions">
+                        <option value="San Francisco">
+                        <option value="New York">
+                        <option value="Seattle">
+                        <option value="Los Angeles">
+                        <option value="Chicago">
+                        <option value="San Francisco1">
+                        <option value="New York1">
+                        <option value="Seattle1">
+                        <option value="Los Angeles1">
+                        <option value="Chicago1">
+                        <option value="San Francisco2">
+                        <option value="New York2">
+                        <option value="Seattle2">
+                        <option value="Los Angeles2">
+                        <option value="Chicago2">
+                    </datalist>
+                    <button class="btn btn-outline-secondary" type="button" id="formSubmit">Go</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- floor image background -->
     <img src="../../static/maps/{{ img_file }}" id="floorImg">
     
     <!-- hold the triangle for user position -->
     <div id="userPos"></div>
 
-    <!-- hold the paths the user needs to travel.? -->
+    <!-- hold the paths the user needs to travel -->
     <canvas id="userPaths"width="100" height="100"></canvas>
         
     </div>

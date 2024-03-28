@@ -5,8 +5,10 @@ const HEADER_HEIGHT = 56;
 // hardcoded test values. 
 // rotation: degree (0 is upwards, 90 is right, 270 is left)
 // position values: must be less than the height of the image. 
-let userY = 632;
-let userX = 776;
+// let userY = 632;
+// let userX = 776;
+let userX = 330;
+let userY = 709;
 let movingUp = true;
 let rotation = 0;
 
@@ -18,17 +20,52 @@ let total_delay = 0;
 $(document).ready(function(){
     var floorImg = $( "#floorImg" );
 
+    const tagId = JSON.parse(document.getElementById('tag-id').textContent);
+
+    // get the user position using websocket
+    const webSocket = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/ws/get_location/'
+        + tagId
+        + '/'
+    )
+
+    webSocket.onmessage = function(e) {
+        const data = JSON.parse(JSON.parse(e.data).message);
+        // console.log(e);
+
+        const user_x = data.x_pos * 42 +308; //$("#floorImg").width();
+                const user_y = data.y_pos * 489 + 461; //$("#floorImg").height();
+                const rotation = data.rotation;
+
+                // console.log(data.x_pos, data.y_pos, user_x, user_y);
+                const delay = Date.now()/1000 - data.time;
+
+                total_delay += delay;
+                const avg = total_delay / (++num_received);
+                // console.log(`Time elapsed(${delay}), total(${avg})`);
+
+                changeImgPos(user_x, user_y, rotation);
+    };
+
+    webSocket.onclose = function(e) {
+        console.error("socket closed early, unexpectedly.")
+    }
+
     // get the user position using http request
     function getUserLocation() {
         $.ajax({
-            url: 'http://3.90.105.209:8000/get_user_location',
+            // url: 'http://3.90.105.209:8000/get_user_location',
+            url: 'http://localhost:8000/get_user_location',
             type: 'GET',  // Specify the HTTP method
             dataType: 'json',  // Expect a JSON response from the server
             success: function(data) {
                 // console.log("User Location:", data);
 
-                const user_x = data.x_pos * $("#floorImg").width();
-                const user_y = data.y_pos * $("#floorImg").height();
+                const user_x = data.x_pos * 42 +308; //$("#floorImg").width();
+                const user_y = data.y_pos * 489 + 461; //$("#floorImg").height();
+                const rotation = data.rotation;
 
                 // console.log(data.x_pos, data.y_pos, user_x, user_y);
                 const delay = Date.now()/1000 - data.time;
@@ -37,7 +74,7 @@ $(document).ready(function(){
                 const avg = total_delay / (++num_received);
                 console.log(`Time elapsed(${delay}), total(${avg})`);
 
-                changeImgPos(user_x, user_y, 0);
+                changeImgPos(user_x, user_y, rotation);
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 // Handle errors
@@ -46,11 +83,12 @@ $(document).ready(function(){
         });
     }
 
-    getUserLocation();
-    setInterval(getUserLocation, 500);
+    // getUserLocation();
+    // setInterval(getUserLocation, 500);
 
     // change position to center over a hallway (i.e the user's initial pos)
-    // changeImgPos(userX, userY, rotation);
+    changeImgPos(userX, userY, rotation);
+    console.log(userX, userY);
 
     // emulate server response?
     // update user's position, update the paths we need to draw?
@@ -70,21 +108,27 @@ $(document).ready(function(){
         changeImgPos(userX, userY, rotation);
         // redraw the paths
 
+        webSocket.send(
+            JSON.stringify({
+                'type': "test",
+            })
+        );
+
     });
 
 });
 
 
 function drawNavigationLine(startX, startY, endX, endY) {
-    const canvas = document.getElementById('userPaths');
-    const context = canvas.getContext('2d');
+    // const canvas = document.getElementById('userPaths');
+    // const context = canvas.getContext('2d');
   
-    context.beginPath();
-    context.moveTo(startX, startY);
-    context.lineTo(endX, endY);
-    context.lineWidth = 4;        // Adjust line thickness
-    context.strokeStyle = 'blue'; // Set line color
-    context.stroke();
+    // context.beginPath();
+    // context.moveTo(startX, startY);
+    // context.lineTo(endX, endY);
+    // context.lineWidth = 4;        // Adjust line thickness
+    // context.strokeStyle = 'blue'; // Set line color
+    // context.stroke();
   }
   
 
@@ -133,6 +177,8 @@ function changeImgPos(width, height, rotation) {
         left: window_width/2 - 10,
         rotate: `${rotation}deg`
     });
+
+    // console.log(rotation);
 
 }
 

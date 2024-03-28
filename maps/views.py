@@ -23,6 +23,8 @@ def floor(request, floor_id):
     floor = Floor.objects.get(id=floor_id)
     
     context["img_file"] = floor.img_path
+    context["tagId"] = "http_test" # should be connected to user acc
+                                    # or for testing, the floor, 
 
     return render(request, "maps/floor.html", context=context)
 
@@ -88,6 +90,7 @@ def update_user_location(request):
         
         tag.x_pos = data["x_pos"]
         tag.y_pos = data["y_pos"]
+        tag.rotation = data["rotation"]
 
         tag.floor = Floor.objects.get(id=data["floor"])
 
@@ -107,10 +110,11 @@ def get_user_location(request):
     try:
         tag = Tag.objects.get(id=USER_TAG)
     except:
-        return JsonResponse({'error': 'Only POST requests allowed.'})
+        return JsonResponse({'error': 'Tag ID not found.'})
 
     return JsonResponse({
         'x_pos': tag.x_pos,
         'y_pos': tag.y_pos,
+        'rotation': tag.rotation,
         'time': tag.last_update_time,
     })

@@ -29,19 +29,20 @@ SECRET_KEY = CONFIG.get("Django", "Secret")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['172.31.31.139', '3.90.105.209']
+ALLOWED_HOSTS = ['localhost', '172.31.31.139', '3.90.105.209']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
+    'maps',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'maps'
 ]
 
 MIDDLEWARE = [
@@ -126,3 +127,17 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+# Daphne
+ASGI_APPLICATION = "webapps.asgi.application"
+# Channels
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("localhost", 6379), ("3.90.105.209", 6379)],
+        },
+    },
+}
