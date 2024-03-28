@@ -7,14 +7,19 @@ from channels.generic.websocket import WebsocketConsumer
 
 class LocationConsumer(WebsocketConsumer):
     def connect(self):
+        print("HELLO")
         self.tag_id = self.scope["url_route"]["kwargs"]["tag_id"]
         self.tag_id_group_name = f"chat_{self.tag_id}"
+        print("join room")
 
-        # Join room group
-        async_to_sync(self.channel_layer.group_add)(
-            self.tag_id_group_name, self.channel_name
-        )
-
+        try:
+            # Join room group
+            async_to_sync(self.channel_layer.group_add)(
+                self.tag_id_group_name, self.channel_name
+            )
+            print("rip")
+        except Exception as e:
+            print(e)
         self.accept()
     
     def disconnect(self, close_code):
