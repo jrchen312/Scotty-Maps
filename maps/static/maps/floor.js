@@ -36,59 +36,26 @@ $(document).ready(function(){
         // console.log(e);
 
         const user_x = data.x_pos * 42 +308; //$("#floorImg").width();
-                const user_y = data.y_pos * 489 + 461; //$("#floorImg").height();
-                const rotation = data.rotation;
+        const user_y = data.y_pos * 489 + 461; //$("#floorImg").height();
+        const rotation = data.rotation;
 
-                // console.log(data.x_pos, data.y_pos, user_x, user_y);
-                const delay = Date.now()/1000 - data.time;
+        // console.log(data.x_pos, data.y_pos, user_x, user_y);
+        const delay = Date.now()/1000 - data.time;
 
-                total_delay += delay;
-                const avg = total_delay / (++num_received);
-                // console.log(`Time elapsed(${delay}), total(${avg})`);
+        total_delay += delay;
+        const avg = total_delay / (++num_received);
+        console.log(`Time elapsed(${delay}), total(${avg})`);
 
-                changeImgPos(user_x, user_y, rotation);
+        changeImgPos(user_x, user_y, rotation);
     };
 
     webSocket.onclose = function(e) {
         console.error("socket closed early, unexpectedly.")
     }
 
-    // get the user position using http request
-    function getUserLocation() {
-        $.ajax({
-            // url: 'http://3.90.105.209:8000/get_user_location',
-            url: 'http://localhost:8000/get_user_location',
-            type: 'GET',  // Specify the HTTP method
-            dataType: 'json',  // Expect a JSON response from the server
-            success: function(data) {
-                // console.log("User Location:", data);
-
-                const user_x = data.x_pos * 42 +308; //$("#floorImg").width();
-                const user_y = data.y_pos * 489 + 461; //$("#floorImg").height();
-                const rotation = data.rotation;
-
-                // console.log(data.x_pos, data.y_pos, user_x, user_y);
-                const delay = Date.now()/1000 - data.time;
-
-                total_delay += delay;
-                const avg = total_delay / (++num_received);
-                console.log(`Time elapsed(${delay}), total(${avg})`);
-
-                changeImgPos(user_x, user_y, rotation);
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                // Handle errors
-                console.error("Error retrieving location:", textStatus, errorThrown);
-            }
-        });
-    }
-
-    // getUserLocation();
-    // setInterval(getUserLocation, 500);
-
-    // change position to center over a hallway (i.e the user's initial pos)
-    changeImgPos(userX, userY, rotation);
-    console.log(userX, userY);
+    // // change position to center over a hallway (i.e the user's initial pos)
+    // changeImgPos(userX, userY, rotation);
+    // console.log(userX, userY);
 
     // emulate server response?
     // update user's position, update the paths we need to draw?
@@ -179,7 +146,6 @@ function changeImgPos(width, height, rotation) {
     });
 
     // console.log(rotation);
-
 }
 
 

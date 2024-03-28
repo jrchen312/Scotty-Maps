@@ -29,7 +29,7 @@ SECRET_KEY = CONFIG.get("Django", "Secret")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '172.31.31.139', '3.90.105.209']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '3.90.105.209']
 
 
 # Application definition
@@ -137,8 +137,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("3.90.105.209", 6379), ('127.0.0.1', 6379)],
-            #"password": "9T450y\^%J;u",
+            "hosts": [("3.90.105.209", 6379), ('127.0.0.1', 6379), ('localhost', 6379)],
         },
     },
 }

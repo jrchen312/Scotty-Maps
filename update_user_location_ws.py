@@ -20,7 +20,7 @@ FLOOR_ID = 1
 WEBAPP_URI = f"ws://localhost:8000/ws/get_location/{TAG_ID}/"
 
 # # # url of webserver
-# WEBAPP_URI = f"ws://3.90.105.209:8000/ws/get_location/{TAG_ID}/"
+WEBAPP_URI = f"ws://3.90.105.209:8000/ws/get_location/{TAG_ID}/"
 
 
 class WebSocketWrapper():
@@ -50,7 +50,7 @@ async def update_user_position(websocket, initial_time, x_pos, y_pos, rotation):
 async def main():
     async with websockets.connect(WEBAPP_URI) as websocket:
         while True:
-            time.sleep(0.5) # change me
+            # time.sleep(0.5) # change me
 
 
             time1 = time.time()
