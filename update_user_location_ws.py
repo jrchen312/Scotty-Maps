@@ -23,12 +23,6 @@ WEBAPP_URI = f"ws://localhost:8000/ws/get_location/{TAG_ID}/"
 WEBAPP_URI = f"ws://3.90.105.209:8000/ws/get_location/{TAG_ID}/"
 
 
-class WebSocketWrapper():
-    def __init__(self):
-        self.ws = websockets.connect(WEBAPP_URI)
-    
-
-
 # send update
 async def update_user_position(websocket, initial_time, x_pos, y_pos, rotation):
     # Compile data dictionary. All fields are mandatory. 
@@ -50,8 +44,6 @@ async def update_user_position(websocket, initial_time, x_pos, y_pos, rotation):
 async def main():
     async with websockets.connect(WEBAPP_URI) as websocket:
         while True:
-            # time.sleep(0.5) # change me
-
 
             time1 = time.time()
 
@@ -69,8 +61,6 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.get_event_loop().run_until_complete(main())
-    
-         
 
         
 
