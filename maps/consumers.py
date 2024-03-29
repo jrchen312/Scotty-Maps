@@ -1,14 +1,23 @@
 
 import json
 
-from .models import Tag
+from .models import Tag, Floor
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 
 class LocationConsumer(WebsocketConsumer):
+    # more security is nice. The current url format allows differentiation 
+    # between different tag devices, and that tag device being on different 
+    # floors. 
     def connect(self):
+        # Parse the url route
         self.tag_id = self.scope["url_route"]["kwargs"]["tag_id"]
-        self.tag_id_group_name = f"chat_{self.tag_id}"
+        self.floor_id = self.scope["url_route"]["kwargs"]["floor_id"]
+        self.tag_id_group_name = f"nav_{self.floor_id}_{self.tag_id}"
+
+        # Load some details about the floor to help translate provided position
+        # to a pixel location to display on a map?
+        # floor = Floor.objects.get(id=self.floor_id)
 
         try:
             # Join room group
@@ -21,7 +30,6 @@ class LocationConsumer(WebsocketConsumer):
         self.accept()
     
     def disconnect(self, close_code):
-        # Leave room group
         async_to_sync(self.channel_layer.group_discard)(
             self.tag_id_group_name, self.channel_name
         )

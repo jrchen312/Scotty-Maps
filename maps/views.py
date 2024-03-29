@@ -21,10 +21,18 @@ def floor(request, floor_id):
     context = dict()
 
     floor = Floor.objects.get(id=floor_id)
-    
+
     context["img_file"] = floor.img_path
+    context["floorId"] = floor_id
     context["tagId"] = "http_test" # should be connected to user acc
                                     # or for testing, the floor, 
+    
+    context["floorScaling"] = {
+        "x_scaling": floor.x_pixel_scale,
+        "y_scaling": floor.y_pixel_scale,
+        "x_offset": floor.x_pixel_offset,
+        "y_offset": floor.y_pixel_offset,
+    }
 
     return render(request, "maps/floor.html", context=context)
 

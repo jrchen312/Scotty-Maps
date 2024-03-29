@@ -13,14 +13,20 @@ import websockets
 import json
 import asyncio
 
-# these constants should not be changed. 
+# Do not change
 TAG_ID = "http_test"
-FLOOR_ID = 1
 
-WEBAPP_URI = f"ws://localhost:8000/ws/get_location/{TAG_ID}/"
+# Theoretically the tag device is able to figure out which floor it is in, but
+# just hard code it...
+# 1: Hall of Arts 1
+# 3: Test Square
+# 4: Hamerschlag A
+FLOOR_ID = 4
 
-# # # url of webserver
-WEBAPP_URI = f"ws://3.90.105.209:8000/ws/get_location/{TAG_ID}/"
+WEBAPP_URI = f"ws://localhost:8000/ws/get_location/{FLOOR_ID}/{TAG_ID}/"
+
+# # url of webserver
+# WEBAPP_URI = f"ws://3.90.105.209:8000/ws/get_location/{FLOOR_ID}/{TAG_ID}/"
 
 
 # send update
@@ -40,23 +46,30 @@ async def update_user_position(websocket, initial_time, x_pos, y_pos, rotation):
     _ = await websocket.recv()
 
 
-
+"""
+Main sequence of events to send to the server
+If the device gets disconnected from the websocket, just try connecting again.
+"""
 async def main():
-    async with websockets.connect(WEBAPP_URI) as websocket:
-        while True:
+    while True:
+        try:
+            async with websockets.connect(WEBAPP_URI) as websocket:
+                while True:
+                    # time.sleep(0.5)
+                    time1 = time.time()
 
-            time1 = time.time()
+                    x_pos = min(max(random.random(), 0), 1) # change me
+                    y_pos = min(max(random.random(), 0), 1) # change me
+                    rotation = random.random()*360          # change me
 
-            x_pos = min(max(random.random(), 0), 1) # change me
-            y_pos = min(max(random.random(), 0), 1) # change me
-            rotation = random.random()*360          # change me
+                    await update_user_position(websocket, time1, x_pos, y_pos, rotation)
+                    time2 = time.time()
 
+                    print(f"Time required: {time2-time1}")
 
-
-            await update_user_position(websocket, time1, x_pos, y_pos, rotation)
-            time2 = time.time()
-
-            print(f"Time required: {time2-time1}")
+        except Exception as e:
+            print(e)
+            time.sleep(2)
     
 
 if __name__ == "__main__":

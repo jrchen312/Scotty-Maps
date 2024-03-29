@@ -35,6 +35,15 @@ class Floor(models.Model):
     # image path
     img_path = models.CharField(max_length=100)
 
+    # Include some information regarding the scale and offset for mapping
+    # e.g. full width of map is ~300 pixels wide across the image
+    x_pixel_scale = models.IntegerField(default=300)
+    y_pixel_scale = models.IntegerField(default=300)
+
+    # this ideally points to the top left corner of where mapping starts
+    x_pixel_offset = models.IntegerField(default=0)
+    y_pixel_offset = models.IntegerField(default=0)
+
     def __str__(self):
         return f"{self.location.name} {self.name}"
 

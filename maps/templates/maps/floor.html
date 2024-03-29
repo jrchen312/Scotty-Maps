@@ -14,7 +14,10 @@
 
 {% block body %}
 
+{{ floorId|json_script:"floor-id" }}
 {{ tagId|json_script:"tag-id"}}
+
+{{ floorScaling|json_script:"floor-scaling" }}
 
 <div id="mapContainer">
     <!-- header for inputting location, showign direction  -->

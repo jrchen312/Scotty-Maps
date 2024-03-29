@@ -20,23 +20,22 @@ let total_delay = 0;
 $(document).ready(function(){
     var floorImg = $( "#floorImg" );
 
+    const floorId = JSON.parse(document.getElementById('floor-id').textContent);
     const tagId = JSON.parse(document.getElementById('tag-id').textContent);
+    const ws_string =`ws://${window.location.host}/ws/get_location/${floorId}/${tagId}/`;
+
+    const floorScaling = JSON.parse(document.getElementById('floor-scaling').textContent);
 
     // get the user position using websocket
-    const webSocket = new WebSocket(
-        'ws://'
-        + window.location.host
-        + '/ws/get_location/'
-        + tagId
-        + '/'
-    )
+    const webSocket = new WebSocket(ws_string);
 
     webSocket.onmessage = function(e) {
         const data = JSON.parse(JSON.parse(e.data).message);
         // console.log(e);
 
-        const user_x = data.x_pos * 42 +308; //$("#floorImg").width();
-        const user_y = data.y_pos * 489 + 461; //$("#floorImg").height();
+        const user_x = data.x_pos * floorScaling.x_scaling + floorScaling.x_offset;
+        const user_y = data.y_pos * floorScaling.y_scaling + floorScaling.y_offset;
+
         const rotation = data.rotation;
 
         // console.log(data.x_pos, data.y_pos, user_x, user_y);
@@ -44,8 +43,9 @@ $(document).ready(function(){
 
         total_delay += delay;
         const avg = total_delay / (++num_received);
-        console.log(`Time elapsed(${delay}), total(${avg})`);
+        // console.log(`Time elapsed(${delay}), total(${avg})`);
 
+        console.log(user_x, user_y);
         changeImgPos(user_x, user_y, rotation);
     };
 
@@ -60,27 +60,7 @@ $(document).ready(function(){
     // emulate server response?
     // update user's position, update the paths we need to draw?
     $("#userPaths").click(function() {
-        
-        // move user position
-        if (movingUp) {
-            userY = userY - 10;
-            if (userY <=232) {
-                movingUp = false;
-            }
-        } else {
-            rotation = 270;
-            userX = userX - 10;
-        }
-        
         changeImgPos(userX, userY, rotation);
-        // redraw the paths
-
-        webSocket.send(
-            JSON.stringify({
-                'type': "test",
-            })
-        );
-
     });
 
 });
