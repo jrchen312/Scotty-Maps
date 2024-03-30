@@ -37,21 +37,19 @@ class LocationConsumer(WebsocketConsumer):
     def receive(self, text_data):
         data = json.loads(text_data)
 
-        if (data["type"]) == "update":
-
-            try:
-                #tag = Tag.objects.get(id=data["tag_id"])
-                msg = {
-                    'x_pos': data["x_pos"], #tag.x_pos,
-                    'y_pos': data["y_pos"], #tag.y_pos,
-                    'rotation': data["rotation"], #tag.rotation,
-                    'time': data["time"], #tag.last_update_time,
-                }
-            except:
-                msg = {'error': 'Tag ID not found.'}
-
+        if (("type" in data) and (data["type"]) == "update"):
+            msg = {
+                'type': "update",
+                'x_pos': data["x_pos"], #tag.x_pos,
+                'y_pos': data["y_pos"], #tag.y_pos,
+                'rotation': data["rotation"], #tag.rotation,
+                'time': data["time"], #tag.last_update_time,
+            }
         else:
-            msg = "huh"
+            msg = {
+                "type": "error",
+                "error": "An illegal data packet was received."
+            }
 
         # Send message to room group
         async_to_sync(self.channel_layer.group_send)(

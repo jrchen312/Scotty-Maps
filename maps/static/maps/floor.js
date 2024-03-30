@@ -2,6 +2,10 @@
 // can define this through other means
 const HEADER_HEIGHT = 56;
 
+// global variable for the timeout id
+let timeout_id = null;
+const TIME_OUT_TIME = 4000; // trigger timeout after x milliseconds
+
 // hardcoded test values. 
 // rotation: degree (0 is upwards, 90 is right, 270 is left)
 // position values: must be less than the height of the image. 
@@ -18,7 +22,6 @@ let num_received = 0;
 let total_delay = 0;
 
 $(document).ready(function(){
-    var floorImg = $( "#floorImg" );
 
     const floorId = JSON.parse(document.getElementById('floor-id').textContent);
     const tagId = JSON.parse(document.getElementById('tag-id').textContent);
@@ -31,25 +34,40 @@ $(document).ready(function(){
 
     webSocket.onmessage = function(e) {
         const data = JSON.parse(JSON.parse(e.data).message);
-        // console.log(e);
 
-        const user_x = data.x_pos * floorScaling.x_scaling + floorScaling.x_offset;
-        const user_y = data.y_pos * floorScaling.y_scaling + floorScaling.y_offset;
+        if (data.type == "update") {
+            // hide the banner
+            $("#loadingScreen").hide();
 
-        const rotation = data.rotation;
+            const user_x = data.x_pos * floorScaling.x_scaling + floorScaling.x_offset;
+            const user_y = data.y_pos * floorScaling.y_scaling + floorScaling.y_offset;
 
-        // console.log(data.x_pos, data.y_pos, user_x, user_y);
-        const delay = Date.now()/1000 - data.time;
+            const rotation = data.rotation;
 
-        total_delay += delay;
-        const avg = total_delay / (++num_received);
-        // console.log(`Time elapsed(${delay}), total(${avg})`);
+            // Time related things
+            clearTimeout(timeout_id);
+            timeout_id = setTimeout(websocketTimeout, TIME_OUT_TIME);
 
-        console.log(user_x, user_y);
-        changeImgPos(user_x, user_y, rotation);
+            const delay = Date.now()/1000 - data.time;
+
+            total_delay += delay;
+            const avg = total_delay / (++num_received);
+            console.log(`Time elapsed(${delay}), total(${avg})`);
+
+            changeImgPos(user_x, user_y, rotation);
+        } else {
+            // maybe the tag disconnected 
+            $("#loadingScreen").show();
+        }
+        
     };
 
     webSocket.onclose = function(e) {
+        // show loading banner
+        clearTimeout(timeout_id);
+
+        $("#loadingScreen").show();
+
         console.error("socket closed early, unexpectedly.")
     }
 
@@ -64,6 +82,11 @@ $(document).ready(function(){
     });
 
 });
+
+function websocketTimeout() {
+    console.log("running timeout function");
+    $("#loadingScreen").show();
+}
 
 
 function drawNavigationLine(startX, startY, endX, endY) {
