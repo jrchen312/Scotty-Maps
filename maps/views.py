@@ -27,6 +27,11 @@ def floor(request, floor_id):
     context["tagId"] = "http_test" # should be connected to user acc
                                     # or for testing, the floor, 
     
+    # include the rooms of the floor. 
+    context["rooms"] = floor.rooms.all().order_by('name')
+
+    # used for the client to hold information regarding the floor to display
+    # the user's position. 
     context["floorScaling"] = {
         "x_scaling": floor.x_pixel_scale,
         "y_scaling": floor.y_pixel_scale,
@@ -79,9 +84,16 @@ def get_map_pins(request):
     
     return JsonResponse(info, safe=False, content_type="application/javascript")
 
+def update_navigation_directions(request):
+    if request.method == 'POST':
+        data = request.POST
+        print(data)
+    else:
+        return JsonResponse({'error': "only post requests allowed"})
+    return JsonResponse({'directions': [10, 20, 30, 40]})
+
 """
 Update the user location for a "floor". 
-
 """
 @csrf_exempt
 def update_user_location(request):

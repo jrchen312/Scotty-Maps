@@ -9,10 +9,9 @@ const TIME_OUT_TIME = 4000; // trigger timeout after x milliseconds
 // hardcoded test values. 
 // rotation: degree (0 is upwards, 90 is right, 270 is left)
 // position values: must be less than the height of the image. 
-// let userY = 632;
-// let userX = 776;
-let userX = 330;
-let userY = 709;
+let user_x = 0;
+let user_y = 0;
+
 let movingUp = true;
 let rotation = 0;
 
@@ -39,8 +38,8 @@ $(document).ready(function(){
             // hide the banner
             $("#loadingScreen").hide();
 
-            const user_x = data.x_pos * floorScaling.x_scaling + floorScaling.x_offset;
-            const user_y = data.y_pos * floorScaling.y_scaling + floorScaling.y_offset;
+            user_x = data.x_pos * floorScaling.x_scaling + floorScaling.x_offset;
+            user_y = data.y_pos * floorScaling.y_scaling + floorScaling.y_offset;
 
             const rotation = data.rotation;
 
@@ -71,18 +70,98 @@ $(document).ready(function(){
         console.error("socket closed early, unexpectedly.")
     }
 
-    // // change position to center over a hallway (i.e the user's initial pos)
-    // changeImgPos(userX, userY, rotation);
-    // console.log(userX, userY);
-
-    // emulate server response?
-    // update user's position, update the paths we need to draw?
-    $("#userPaths").click(function() {
-        changeImgPos(userX, userY, rotation);
-    });
-
 });
 
+
+// Access the form on map.html and change the default behavior of submit
+// to submit with AJAX. 
+$(document).on('submit','#form',function(e){
+    e.preventDefault();
+
+    // Initial form validation
+    const roomName = $("#roomInput").val().trim();
+
+    if (roomName === "" || isNaN(user_x) || isNaN(user_y) || user_x === 0 || user_y === 0) {
+        // Display an error message to the user (modify as needed)
+        alert("Please fill in all fields with valid values. Coordinates cannot be 0.");
+        return;  // Stop form submission 
+    }
+
+    submitFormAJAX(e);
+});
+
+
+function submitFormAJAX(e) {
+    $.ajax({
+        type: 'POST',
+        url: e.currentTarget.action,
+        data: {
+            room_name: $("#roomInput").val(),
+            user_x: user_x,
+            user_y: user_y,
+
+            // https://electrictoolbox.com/jquery-form-elements-by-name/
+            csrfmiddlewaretoken:$('#form input[name=csrfmiddlewaretoken]').val()
+        },
+        success: updateMapNavigation,
+        error: updateError
+    });
+}
+
+
+/**
+ * Main function to display the map navigation... 
+ */
+function updateMapNavigation(result) {
+    console.log(result);
+
+    // draw the navigation lines
+    // TODO
+
+    // update the div with the directions
+    // TODO
+}
+
+/**
+ * Parse xhr error and display it
+ */
+function updateError(xhr) {
+    if (xhr.status == 0) {
+        displayError("Cannot connect to server")
+        return
+    }
+
+    if (!xhr.getResponseHeader('content-type') == 'application/json') {
+        displayError("Received status=" + xhr.status)
+        return
+    }
+
+    let response = JSON.parse(xhr.responseText)
+    if (response.hasOwnProperty('error')) {
+        displayError(response.error)
+        return
+    }
+
+    displayError(response)
+}
+
+
+/**
+ * Basic visual message to display an issue with the form submission
+ */
+function displayError(message) {
+    $("#error").html(`
+        <div class="alert alert-danger" role="alert">
+            An error occurred: ${message}
+        </div>
+    `);
+}
+
+
+/*
+ * This function is run when the tag device is timed out
+ * i.e. the tag device has stopped sending location data in past few seconds
+ */
 function websocketTimeout() {
     console.log("running timeout function");
     $("#loadingScreen").show();
@@ -128,13 +207,13 @@ function changeImgPos(width, height, rotation) {
     $("#userPaths").attr("width", $("#floorImg").width());
     $("#userPaths").attr("height", $("#floorImg").height());
 
-    // draw the paths onto the div
-    for (let i=0; i < 1; i++) {
-        positions.forEach(line => {
-            drawNavigationLine(line.startX, line.startY, line.endX, line.endY);
-        });
+    // // draw the paths onto the div
+    // for (let i=0; i < 1; i++) {
+    //     positions.forEach(line => {
+    //         drawNavigationLine(line.startX, line.startY, line.endX, line.endY);
+    //     });
 
-    }
+    // }
 
     // move the position of the div to the same offset as the image
     $("#userPaths").css({top: new_top, left: new_left});
