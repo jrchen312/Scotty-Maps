@@ -52,7 +52,7 @@ $(document).ready(function(){
 
             total_delay += delay;
             const avg = total_delay / (++num_received);
-            console.log(`Time elapsed(${delay}), total(${avg})`);
+            console.log(`Time elapsed(${delay}), total(${avg}), x_pos(${data.x_pos}), y_pos(${data.y_pos}), rot(${rotation})`);
 
             changeImgPos(user_x, user_y, rotation);
         } else {

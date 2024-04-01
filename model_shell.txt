@@ -31,3 +31,18 @@ hh_test.save()
 hh_A = Floor(location=hh, name="Floor A", img_path="hha.png")
 hh_A.save()
 
+
+# rooms inside of HHA 
+from maps.models import *
+hha_A = Floor.objects.get(name = "Floor A")
+room_names = ["A202", "A203", "A204", "A205", "A206", "A207", "A208", "A209", "A210", "A211", "A212", "A213"]
+
+for name in room_names:
+    hh_room = Room(floor=hha_A, name=name)
+    hh_room.save()
+
+hh_room = Room(floor=hha_A, name="A101")
+hh_room.save()
+hh_room = Room(floor=hha_A, name="A104")
+hh_room.save()
+

@@ -48,6 +48,22 @@ class Floor(models.Model):
         return f"{self.location.name} {self.name}"
 
 
+class Room(models.Model):
+    # corresponding Floor
+    floor = models.ForeignKey(
+        Floor,
+        on_delete=models.CASCADE,
+        related_name="rooms",
+    )
+
+    # room number
+    name = models.CharField(max_length=100)
+
+    # oyes XD
+    def __str__(self):
+        return f"{self.floor.location.name} {self.floor.name} {self.name}"
+    
+    
 # a model for each of the "tags" made. This will simply be a way of providing
 # the user's location to the server. 
 class Tag(models.Model):
