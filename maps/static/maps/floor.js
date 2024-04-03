@@ -38,10 +38,14 @@ $(document).ready(function(){
             // hide the banner
             $("#loadingScreen").hide();
 
-            user_x = data.x_pos * floorScaling.x_scaling + floorScaling.x_offset;
-            user_y = data.y_pos * floorScaling.y_scaling + floorScaling.y_offset;
+            new_user_x = data.x_pos * floorScaling.x_scaling + floorScaling.x_offset;
+            new_user_y = data.y_pos * floorScaling.y_scaling + floorScaling.y_offset;
 
-            const rotation = data.rotation;
+            const rotation = calculateAngleWithYAxis(user_x, user_y, new_user_x, new_user_y);
+
+            // const rotation = data.rotation;
+            user_x = new_user_x;
+            user_y = new_user_y;
 
             // Time related things
             clearTimeout(timeout_id);
@@ -72,6 +76,22 @@ $(document).ready(function(){
 
 });
 
+
+function calculateAngleWithYAxis(x_pos, y_pos, new_x_pos, new_y_pos) {
+    // Calculate the slope
+    const slope = (new_y_pos - y_pos) / (new_x_pos - x_pos);
+  
+    // Calculate angle with respect to x-axis (in radians)
+    let angleWithXAxis = Math.atan(slope); 
+  
+    // Convert to degrees
+    angleWithXAxis = angleWithXAxis * (180 / Math.PI);
+  
+    // Adjust for inverted y-axis
+    const angleWithYAxis = 180 - angleWithXAxis;
+  
+    return angleWithYAxis;
+}
 
 // Access the form on map.html and change the default behavior of submit
 // to submit with AJAX. 
