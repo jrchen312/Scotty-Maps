@@ -3,7 +3,7 @@ import time
 import json
 from PIL import Image, ImageDraw
 
-a_star_dirs = [(0, 1), (0, -1) , (1, 0), (-1, 0), (1, 1), (1, -1), (-1, 1), (-1, -1)]
+a_star_dirs = [(0, 1), (0, -1) , (1, 0), (-1, 0)] #, (1, 1), (1, -1), (-1, 1), (-1, -1)]
 
 class Node():
     def __init__(self, parent=None, position=None):
@@ -111,6 +111,54 @@ def save_path_as_image(graph, path):
 
     image.save("graph.png")
 
+
+# bfs search to find the nearest nearest graph point to the user point
+bfs_directions = [(1, 0), (0, 1), (-1, 0), (0, -1)]
+def find_nearest_graph_location(graph, init_row, init_col):
+    rows = len(graph)
+    cols = len(graph[0])
+
+    seen = set() # seen objects
+    search = list() # search list
+
+    seen.add((init_row, init_col))
+    search.append((init_row, init_col))
+
+    while len(search) > 0:
+
+        # for the elements in our current layer
+        for _ in range(len(search)):
+            parent_row, parent_col = search.pop(0)
+
+            if (graph[parent_row][parent_col] == 0):
+                return (parent_row, parent_col)
+
+            for (dr, dc) in bfs_directions:
+                nr, nc = parent_row + dr, parent_col + dc
+
+                if (0 <= nr < rows) and (0 <= nc < cols) and ((nr, nc) not in seen):
+                    seen.add((nr, nc))
+                    search.append((nr, nc))
+
+def hh_A_example():
+    graph = load_graph_from_json("hha_graph.json")
+    print(find_nearest_graph_location(graph, 933, 312))
+
+
+def navigation_directions(graph_path, user_row, user_col, dest_row, dest_col):
+    a = time.time()
+    graph = load_graph_from_json(graph_path)
+
+    start = find_nearest_graph_location(graph, user_row, user_col)
+    end = find_nearest_graph_location(graph, dest_row, dest_col)
+
+    path = a_star(graph, start, end)
+    b = time.time()
+    print(len(path), b-a)
+
+    save_path_as_image(graph, path)
+
+
 # runs pretty fast, <0.04 seconds
 def hoa_example():
     graph = load_graph_from_json("graph.json")
@@ -126,4 +174,7 @@ def hoa_example():
     print(f"len({len(path)})")
     save_path_as_image(graph, path)
     
-hoa_example()
+# hoa_example()
+# hh_A_example()
+    
+navigation_directions("hha_graph.json", 933, 312, 177, 173)

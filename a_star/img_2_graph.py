@@ -6,8 +6,19 @@
 from PIL import Image, ImageDraw
 import json
 
-image_path = 'hallofarts1.png'  # Replace with your image file path
+# simple HOA graph
+image_path = 'hallofarts1.png'  
+# (flip the x-y coordinates to rows and cols)
+row_lines = [(227, 311, 227, 781), (1088, 311, 1088, 781)]
+col_lines = [(227, 311, 1088, 311), (227, 781, 1088, 781)]
 
+
+# simple HHA level graph
+image_path = "hha.png"
+row_lines = [(153, 188, 153, 295), (432, 188, 432, 330)]
+col_lines = [(153, 188, 432, 188), (153, 295, 432, 295), (432, 330, 949, 330)]
+
+# TODO: Wiegand gym graph
 
 def img_2_graph(image_path):
     img = Image.open(image_path)
@@ -19,19 +30,16 @@ def img_2_graph(image_path):
     rows, cols = height, width
 
     # create graph
-    graph = [[1 for _ in range(cols)] for _ in range(width)]
-
-
+    graph = [[1 for _ in range(cols)] for _ in range(rows)]
 
     # rows
-    rows = [(227, 311, 227, 781), (1088, 311, 1088, 781)]
-    for row in rows:
+    for row in row_lines:
         for dr in range(row[3]-row[1]):
             graph[row[0]][row[1]+dr] = 0
 
     # cols
-    cols = [(227, 311, 1088, 311), (227, 781, 1088, 781)]
-    for col in cols:
+    for col in col_lines:
+        print(col)
         for dc in range(col[2]-col[0]):
             graph[col[0]+dc][col[1]] = 0
 
@@ -48,7 +56,7 @@ def img_2_graph(image_path):
             color = "green" if graph[y][x] == 0 else "white" 
             draw.rectangle([x, y, x + 1, y + 1], fill=color)
 
-    image.save("graph.png")
+    image.save("graph2.png")
 
 
 if __name__ == "__main__":
