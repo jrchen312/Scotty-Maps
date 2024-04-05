@@ -4,3 +4,4 @@ from .models import *
 # Register your models here.
 admin.site.register(Location)
 admin.site.register(Floor)
+admin.site.register(Room)

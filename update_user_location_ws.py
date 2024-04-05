@@ -19,9 +19,9 @@ TAG_ID = "http_test"
 # Theoretically the tag device is able to figure out which floor it is in, but
 # just hard code it...
 # 1: Hall of Arts 1
-# 3: Test Square
-# 4: Hamerschlag A
-FLOOR_ID = 4
+# 2: Test Square
+# 3: Hamerschlag A
+FLOOR_ID = 3
 
 WEBAPP_URI = f"ws://localhost:8000/ws/get_location/{FLOOR_ID}/{TAG_ID}/"
 
@@ -55,17 +55,18 @@ async def main():
         try:
             async with websockets.connect(WEBAPP_URI) as websocket:
                 while True:
-                    # time.sleep(0.5)
-                    time1 = time.time()
-
                     x_pos = min(max(random.random(), 0), 1) # change me
-                    y_pos = min(max(random.random(), 0), 1) # change me
+                    y_pos = min(max(random.random(), 0), 0.2) # change me
                     rotation = random.random()*360          # change me
 
-                    await update_user_position(websocket, time1, x_pos, y_pos, rotation)
-                    time2 = time.time()
+                    for i in range(10):
+                        time1 = time.time()
 
-                    print(f"Time required: {time2-time1}")
+                        await update_user_position(websocket, time1, x_pos, y_pos, rotation)
+                        time2 = time.time()
+
+                        print(f"Time required: {time2-time1}")
+                        time.sleep(1)
 
         except Exception as e:
             print(e)

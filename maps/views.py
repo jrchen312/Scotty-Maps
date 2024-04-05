@@ -3,7 +3,9 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt 
 from django.urls import reverse
 from .models import *
+from .a_star_alg import navigation_directions
 
+import time
 import requests
 from configparser import ConfigParser
 
@@ -84,13 +86,43 @@ def get_map_pins(request):
     
     return JsonResponse(info, safe=False, content_type="application/javascript")
 
+"""
+Given the position of a user, provide the directions necessary to get to a room
+
+The client will provide these directions as a pixel location.
+To use them in our graph, we will convert them into the graph's row and col. 
+"""
+import os
 def update_navigation_directions(request):
-    if request.method == 'POST':
-        data = request.POST
-        print(data)
-    else:
+    time_0 = time.time()
+    if request.method != 'POST':
         return JsonResponse({'error': "only post requests allowed"})
-    return JsonResponse({'directions': [10, 20, 30, 40]})
+    
+    data = request.POST
+    print(data)
+
+    print(os.listdir())
+    floor = Floor.objects.get(id = data["floor_id"])
+
+    room = floor.rooms.get(name = data["room_name"])
+    # room = Room.objects.get(name = data["room_name"])
+    # floor = room.floor
+    
+
+    graph_path = f"./maps/static/maps/{floor.graph_path}"
+
+    user_row = int(float(data["user_y"]))
+    user_col = int(float(data["user_x"]))
+
+    dest_row = room.y_pos
+    dest_col = room.x_pos
+
+    paths = navigation_directions(graph_path, user_row, user_col, dest_row, dest_col)
+    
+    time_1 = time.time()
+    print(f"time_taken({time_1-time_0})")
+    print(paths)
+    return JsonResponse({'directions': paths})
 
 """
 Update the user location for a "floor". 

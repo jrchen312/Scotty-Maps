@@ -41,9 +41,9 @@ $(document).ready(function(){
             new_user_x = data.x_pos * floorScaling.x_scaling + floorScaling.x_offset;
             new_user_y = data.y_pos * floorScaling.y_scaling + floorScaling.y_offset;
 
-            const rotation = calculateAngleWithYAxis(user_x, user_y, new_user_x, new_user_y);
+            // const rotation = calculateAngleWithYAxis(user_x, user_y, new_user_x, new_user_y);
 
-            // const rotation = data.rotation;
+            const rotation = data.rotation;
             user_x = new_user_x;
             user_y = new_user_y;
 
@@ -77,21 +77,21 @@ $(document).ready(function(){
 });
 
 
-function calculateAngleWithYAxis(x_pos, y_pos, new_x_pos, new_y_pos) {
-    // Calculate the slope
-    const slope = (new_y_pos - y_pos) / (new_x_pos - x_pos);
+// function calculateAngleWithYAxis(x_pos, y_pos, new_x_pos, new_y_pos) {
+//     // Calculate the slope
+//     const slope = (new_y_pos - y_pos) / (new_x_pos - x_pos);
   
-    // Calculate angle with respect to x-axis (in radians)
-    let angleWithXAxis = Math.atan(slope); 
+//     // Calculate angle with respect to x-axis (in radians)
+//     let angleWithXAxis = Math.atan(slope); 
   
-    // Convert to degrees
-    angleWithXAxis = angleWithXAxis * (180 / Math.PI);
+//     // Convert to degrees
+//     angleWithXAxis = angleWithXAxis * (180 / Math.PI);
   
-    // Adjust for inverted y-axis
-    const angleWithYAxis = 180 - angleWithXAxis;
+//     // Adjust for inverted y-axis
+//     const angleWithYAxis = 180 - angleWithXAxis;
   
-    return angleWithYAxis;
-}
+//     return angleWithYAxis;
+// }
 
 // Access the form on map.html and change the default behavior of submit
 // to submit with AJAX. 
@@ -112,10 +112,13 @@ $(document).on('submit','#form',function(e){
 
 
 function submitFormAJAX(e) {
+    const floorId = JSON.parse(document.getElementById('floor-id').textContent);
+
     $.ajax({
         type: 'POST',
         url: e.currentTarget.action,
         data: {
+            floor_id: floorId,
             room_name: $("#roomInput").val(),
             user_x: user_x,
             user_y: user_y,
@@ -135,8 +138,20 @@ function submitFormAJAX(e) {
 function updateMapNavigation(result) {
     console.log(result);
 
+    // mvoe that canvas thing
+    // set the userPaths div size to be equal to the image.
+    $("#userPaths").attr("width", $("#floorImg").width());
+    $("#userPaths").attr("height", $("#floorImg").height());
+
     // draw the navigation lines
-    // TODO
+    const directions = result.directions;
+
+    for (let i=0; i < directions.length; i++) {
+        directions.forEach(line => {
+            drawNavigationLine(line[0], line[1], line[2], line[3]);
+        });
+
+    }
 
     // update the div with the directions
     // TODO
@@ -189,24 +204,24 @@ function websocketTimeout() {
 
 
 function drawNavigationLine(startX, startY, endX, endY) {
-    // const canvas = document.getElementById('userPaths');
-    // const context = canvas.getContext('2d');
+    const canvas = document.getElementById('userPaths');
+    const context = canvas.getContext('2d');
   
-    // context.beginPath();
-    // context.moveTo(startX, startY);
-    // context.lineTo(endX, endY);
-    // context.lineWidth = 4;        // Adjust line thickness
-    // context.strokeStyle = 'blue'; // Set line color
-    // context.stroke();
+    context.beginPath();
+    context.moveTo(startX, startY);
+    context.lineTo(endX, endY);
+    context.lineWidth = 4;        // Adjust line thickness
+    context.strokeStyle = 'blue'; // Set line color
+    context.stroke();
   }
   
 
 // test data. 
-const positions = [
-    { startX: 776, startY: 632, endX: 776, endY: 233 },
-    { startX: 776, startY: 233, endX: 308, endY: 233 },
-    { startX: 308, startY: 233, endX: 308, endY: 313 },
-];
+// const positions = [
+//     { startX: 776, startY: 632, endX: 776, endY: 233 },
+//     { startX: 776, startY: 233, endX: 308, endY: 233 },
+//     { startX: 308, startY: 233, endX: 308, endY: 313 },
+// ];
 
   
 
@@ -222,18 +237,6 @@ function changeImgPos(width, height, rotation) {
     const new_top = -height + (window_height / 2);
     const new_left = -width + (window_width / 2);
     $("#floorImg").css({top: new_top, left: new_left});
-
-    // set the userPaths div size to be equal to the image.
-    $("#userPaths").attr("width", $("#floorImg").width());
-    $("#userPaths").attr("height", $("#floorImg").height());
-
-    // // draw the paths onto the div
-    // for (let i=0; i < 1; i++) {
-    //     positions.forEach(line => {
-    //         drawNavigationLine(line.startX, line.startY, line.endX, line.endY);
-    //     });
-
-    // }
 
     // move the position of the div to the same offset as the image
     $("#userPaths").css({top: new_top, left: new_left});

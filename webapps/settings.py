@@ -37,6 +37,7 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', '3.90.105.209']
 INSTALLED_APPS = [
     'daphne',
     'maps',
+    'a_star',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

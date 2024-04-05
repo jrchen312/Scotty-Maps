@@ -35,6 +35,9 @@ class Floor(models.Model):
     # image path
     img_path = models.CharField(max_length=100)
 
+    # graph path
+    graph_path = models.CharField(max_length=100)
+
     # Include some information regarding the scale and offset for mapping
     # e.g. full width of map is ~300 pixels wide across the image
     x_pixel_scale = models.IntegerField(default=300)
@@ -59,6 +62,9 @@ class Room(models.Model):
     # room number
     name = models.CharField(max_length=100)
 
+    x_pos = models.IntegerField()
+    y_pos = models.IntegerField()
+
     # oyes XD
     def __str__(self):
         return f"{self.floor.location.name} {self.floor.name} {self.name}"
@@ -69,16 +75,16 @@ class Room(models.Model):
 class Tag(models.Model):
     id = models.CharField(max_length=100, primary_key=True)
 
-    x_pos = models.FloatField(null=True, blank=True)
-    y_pos = models.FloatField(null=True, blank=True)
+    # x_pos = models.FloatField(null=True, blank=True)
+    # y_pos = models.FloatField(null=True, blank=True)
 
-    rotation = models.FloatField(null=True, blank=True)
+    # rotation = models.FloatField(null=True, blank=True)
 
-    floor = models.ForeignKey(
-        Floor,
-        on_delete=models.CASCADE,
-        related_name="tags",
-        null=True
-    )
+    # floor = models.ForeignKey(
+    #     Floor,
+    #     on_delete=models.CASCADE,
+    #     related_name="tags",
+    #     null=True
+    # )
 
-    last_update_time = models.FloatField(null=True, blank=True)
+    # last_update_time = models.FloatField(null=True, blank=True)
