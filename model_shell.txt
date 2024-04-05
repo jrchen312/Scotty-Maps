@@ -33,7 +33,7 @@ hh_A = Floor.objects.get(name = "Floor A")
 room_floors["hh_A"] = hh_A
 
 with open("rooms.csv", "r") as file:
-    csv_reader = csv.reader(file, delimiter='\t')
+    csv_reader = csv.reader(file)
     for r in csv_reader:
         room = Room(floor=room_floors[r[0]], name=r[1], x_pos=int(r[2]), y_pos=int(r[3]))
         room.save()
