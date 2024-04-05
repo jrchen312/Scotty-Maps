@@ -19,6 +19,10 @@ hh_test.save()
 hh_A = Floor(location=hh, name="Floor A", img_path="hha.png", graph_path="hha_graph.json", x_pixel_scale=42, y_pixel_scale=489, x_pixel_offset=308, y_pixel_offset=461)
 hh_A.save()
 
+from maps.models import *
+hh = Location.objects.get(id=2)
+ph_A = Floor(location=hh, name="Porter A", img_path="pha.png", graph_path="hha_graph.json", x_pixel_scale=299, y_pixel_scale=23, x_pixel_offset=166, y_pixel_offset=634)
+ph_A.save()
 
 ################################################################################
 # NOTE: add new floors right above
