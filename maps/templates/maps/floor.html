@@ -20,8 +20,45 @@
 {{ floorScaling|json_script:"floor-scaling" }}
 
 <div id="mapContainer">
-    <!-- header for inputting location, showign direction  -->
-    <div id="floorHeader" class="card">
+
+    <!-- hover bubble for navigation directions -->
+    <div class="card floorHeader" id="navigation-view" style="display:none">
+        <div class="card-body">
+            
+            <div class="row">
+                <div class="col-1 turn-indicator">
+                    <i class="bi bi-sign-turn-left"></i>
+                </div>
+                <div class="col-11">
+                    <strong>Turn Left</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- hover bubble for navigation information -->
+    <div class="card floorFooter" id="navigation-info" style="display:none">
+        <div class="card-body">
+            <div class="row">
+                <!-- ETA in minutes + Distance in meters -->
+                <div class="col">
+                    <div class="row" id="time-remaining">
+                        <strong>14 min</strong>
+                    </div>
+                    <div class="row" id="distance-remaining">
+                        2000 feet
+                    </div>
+                </div>
+                <!-- Buttons for Leaving the view -->
+                <div class="col exit-navigation">
+                    <button type="button" class="btn btn-danger" id="exit-navigation-button">Exit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- header for inputting location  -->
+    <div class="card floorHeader" id="location-select">
         <div id="error"></div>
 
         <div class="card-body">
@@ -43,6 +80,8 @@
             </form>
         </div>
     </div>
+
+    
 
     <div id="loadingScreen">
         <div class="spinner-border" role="status">

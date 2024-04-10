@@ -21,12 +21,13 @@ TAG_ID = "http_test"
 # 1: Hall of Arts 1
 # 2: Test Square
 # 3: Hamerschlag A
+# 4: porter hall A
 FLOOR_ID = 3
 
 WEBAPP_URI = f"ws://localhost:8000/ws/get_location/{FLOOR_ID}/{TAG_ID}/"
 
 # # url of webserver
-WEBAPP_URI = f"ws://3.90.105.209:8000/ws/get_location/{FLOOR_ID}/{TAG_ID}/"
+# WEBAPP_URI = f"ws://3.90.105.209:8000/ws/get_location/{FLOOR_ID}/{TAG_ID}/"
 
 
 # send update
@@ -56,17 +57,17 @@ async def main():
             async with websockets.connect(WEBAPP_URI) as websocket:
                 while True:
                     x_pos = min(max(random.random(), 0), 1) # change me
-                    y_pos = min(max(random.random(), 0), 0.2) # change me
+                    y_pos = min(max(random.random(), 0), 1) # change me
                     rotation = random.random()*360          # change me
 
-                    for i in range(10):
-                        time1 = time.time()
+                    # for i in range(10):
+                    time1 = time.time()
 
-                        await update_user_position(websocket, time1, x_pos, y_pos, rotation)
-                        time2 = time.time()
+                    await update_user_position(websocket, time1, x_pos, y_pos, rotation)
+                    time2 = time.time()
 
-                        print(f"Time required: {time2-time1}")
-                        time.sleep(1)
+                    print(f"Time required: {time2-time1}")
+                        # time.sleep(1)
 
         except Exception as e:
             print(e)

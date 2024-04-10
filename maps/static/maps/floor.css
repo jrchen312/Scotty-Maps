@@ -6,7 +6,7 @@
     overflow: hidden;
 }
 
-#floorHeader {
+.floorHeader {
     position: absolute;
     /* left: 10px;
     top: 10px; */
@@ -17,6 +17,19 @@
     margin-right: 10px;
 
     width: calc(100vw - 20px);
+}
+
+.floorFooter {
+    position: absolute;
+    z-index: 40;
+
+    margin-left: 10px;
+    margin-right: 10px;
+
+    bottom: 30px;
+    width: calc(100vw - 20px);
+
+    background-color:rgb(192, 209, 224);
 }
 
 #loadingScreen {
@@ -59,4 +72,31 @@
     user-select: none;   /* don't let the user select it. */
 
     z-index: 10;
+}
+
+
+#navigation-view {
+    background-color: green!important;
+    color: white;
+
+}
+
+
+.turn-indicator {
+    font-size:large;
+}
+
+
+.exit-navigation {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+#time-remaining {
+    font-size:large;
+}
+
+#distance-remaining {
+    padding-left:12px;
 }

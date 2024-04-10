@@ -150,7 +150,7 @@ def convert_path_to_line_segments(path):
         dir = (path[i][0] - path[i-1][0], path[i][1] - path[i-1][1])
         if (dir != curr_dir):
             curr_dir = dir
-            vertices.append(path[i])
+            vertices.append(path[i-1]) #ummmm
     vertices.append(path[-1])
 
     # now need to convert the vertices into line segments
