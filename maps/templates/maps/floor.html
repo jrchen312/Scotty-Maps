@@ -26,11 +26,21 @@
         <div class="card-body">
             
             <div class="row">
-                <div class="col-1 turn-indicator">
-                    <i class="bi bi-sign-turn-left"></i>
+                <div class="col-2 turn-indicator">
+                    <span id="turn-direction-icon">
+                        <i class="bi bi-sign-turn-left"></i>
+                    </span>
                 </div>
-                <div class="col-11">
-                    <strong>Turn Left</strong>
+                <div class="col-10">
+                    <div class="row">
+                        <span id="turn-direction-text" class="navigation-font">Turn Left</span>
+                    </div>
+                    <div class="row">
+                        <div>
+                            <span id="turn-direction-distance">100</span>
+                            <span id="turn-direction-distance-units">meters</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -42,11 +52,17 @@
             <div class="row">
                 <!-- ETA in minutes + Distance in meters -->
                 <div class="col">
-                    <div class="row" id="time-remaining">
-                        <strong>14 min</strong>
+                    <div class="row">
+                        <div class="navigation-font">
+                            <span id="navigation-time-remaining"></span>
+                            <span id="navigation-time-remaining-units">min</span>
+                        </div>
                     </div>
-                    <div class="row" id="distance-remaining">
-                        2000 feet
+                    <div class="row">
+                        <div>
+                            <span id="navigation-distance-remaining">2000</span>
+                            <span id="navigation-distance-remaining-units">meters</span>
+                        </div>
                     </div>
                 </div>
                 <!-- Buttons for Leaving the view -->

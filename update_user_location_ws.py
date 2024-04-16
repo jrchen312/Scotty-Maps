@@ -52,22 +52,27 @@ Main sequence of events to send to the server
 If the device gets disconnected from the websocket, just try connecting again.
 """
 async def main():
+    y_pos = 0
+    x_pos = 0.5
     while True:
         try:
             async with websockets.connect(WEBAPP_URI) as websocket:
                 while True:
-                    x_pos = min(max(random.random(), 0), 1) # change me
-                    y_pos = min(max(random.random(), 0), 1) # change me
+                    # x_pos = min(max(random.random(), 0), 1) # change me
+                    # y_pos = min(max(random.random(), 0), 1) # change me
                     rotation = random.random()*360          # change me
+
+                    y_pos = (y_pos+1) % 100
+                    # y_pos = min(100, y_pos+1)
 
                     # for i in range(10):
                     time1 = time.time()
 
-                    await update_user_position(websocket, time1, x_pos, y_pos, rotation)
+                    await update_user_position(websocket, time1, x_pos, 1-(y_pos/100), rotation)
                     time2 = time.time()
 
                     print(f"Time required: {time2-time1}")
-                        # time.sleep(1)
+                    time.sleep(0.1)
 
         except Exception as e:
             print(e)

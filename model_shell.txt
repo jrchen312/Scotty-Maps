@@ -16,7 +16,9 @@ hh.save()
 hh_test = Floor(location=hh, name="Test Square", img_path="300pxSquare.png", graph_path="300pxSquare_graph.json")
 hh_test.save()
 
-hh_A = Floor(location=hh, name="Floor A", img_path="hha.png", graph_path="hha_graph.json", x_pixel_scale=42, y_pixel_scale=489, x_pixel_offset=308, y_pixel_offset=461)
+hh_A = Floor(location=hh, name="Floor A", img_path="hha.png", graph_path="hha_graph.json", x_pixel_scale=42, y_pixel_scale=489, x_pixel_offset=308, y_pixel_offset=461, 
+                y_pixels_per_meter=18.5227, x_pixels_per_meter=14.61)
+                
 hh_A.save()
 
 from maps.models import *

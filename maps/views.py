@@ -39,6 +39,9 @@ def floor(request, floor_id):
         "y_scaling": floor.y_pixel_scale,
         "x_offset": floor.x_pixel_offset,
         "y_offset": floor.y_pixel_offset,
+
+        "y_pixels_per_meter": floor.y_pixels_per_meter,
+        "x_pixels_per_meter": floor.x_pixels_per_meter,
     }
 
     return render(request, "maps/floor.html", context=context)
@@ -92,16 +95,16 @@ Given the position of a user, provide the directions necessary to get to a room
 The client will provide these directions as a pixel location.
 To use them in our graph, we will convert them into the graph's row and col. 
 """
-import os
+# import os
 def update_navigation_directions(request):
     time_0 = time.time()
     if request.method != 'POST':
         return JsonResponse({'error': "only post requests allowed"})
     
     data = request.POST
-    print(data)
+    # print(data)
 
-    print(os.listdir())
+    # print(os.listdir())
     floor = Floor.objects.get(id = data["floor_id"])
 
     room = floor.rooms.get(name = data["room_name"])
@@ -117,12 +120,17 @@ def update_navigation_directions(request):
     dest_row = room.y_pos
     dest_col = room.x_pos
 
-    paths = navigation_directions(graph_path, user_row, user_col, dest_row, dest_col)
+    paths, txt, icon = navigation_directions(graph_path, user_row, user_col, dest_row, dest_col)
     
     time_1 = time.time()
     print(f"time_taken({time_1-time_0})")
-    print(paths)
-    return JsonResponse({'directions': paths})
+    print(paths, txt)
+
+    return JsonResponse({
+        'directions': paths,
+        'instruction': txt,
+        'icon': icon,
+    })
 
 """
 Update the user location for a "floor". 

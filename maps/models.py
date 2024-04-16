@@ -47,6 +47,10 @@ class Floor(models.Model):
     x_pixel_offset = models.IntegerField(default=0)
     y_pixel_offset = models.IntegerField(default=0)
 
+    # pixel_scale to use for distance remaining estimations. 
+    y_pixels_per_meter = models.FloatField(default=10)
+    x_pixels_per_meter = models.FloatField(default=10)
+
     def __str__(self):
         return f"{self.location.name} {self.name}"
 
