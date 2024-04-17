@@ -143,12 +143,15 @@ function updateMapNavigation(result) {
     drawNavigationLineWrapper(directions);
 
     update_navigation_header_instructions(result.instruction, result.icon);
-
-    // console.log(directions, result);
     canvas_paths = directions;
 
+    if (directions.length == 0) {
+        navigation_done();
+    } else {
+        update_navigation_instructions();
+    }
+
     // update the div with the directions
-    // TODO
     toggle_navigation(true);
 }
 
@@ -316,8 +319,15 @@ function realign_paths(width, height) {
         const y_dist = y_pixels / floorScaling.y_pixels_per_meter;
 
         if ((x_dist + y_dist) < NEXT_DIRECTION_DISTANCE) {
-            submitFormAJAX(canvas_paths[0][2], canvas_paths[0][3]);
-            return;
+            if (canvas_paths.length == 1) {
+                // turn this mode off
+                canvas_paths = Array();
+                navigation_done();
+
+            } else {
+                submitFormAJAX(canvas_paths[0][2], canvas_paths[0][3]);
+                return;
+            }
         }
 
         // FINALLY, maybe this should be moved somewhere else. 
@@ -351,11 +361,34 @@ function update_navigation_instructions() {
 
     // Current turn distance 
     $("#turn-direction-distance").text(Math.round(x_dist+y_dist));
+    $("#turn-direction-distance-units").text("meters");
 
     // Total distance remaining
     $("#navigation-distance-remaining").text(Math.round(total_x_dist + total_y_dist));
+    $("#navigation-distance-remaining-units").text("meters");
 
     // total time remaining in minutes?
     const min_left = Math.round(((total_x_dist + total_y_dist) / (WALKING_SPEED * 60))*10)/10
     $("#navigation-time-remaining").text(min_left);
+    $("#navigation-time-remaining-units").text("mins");
+}
+
+
+// Once navigation is done, clear some of the navigation elements 
+function navigation_done() {
+
+    // clear UI elements:
+    // Current turn distance 
+    $("#turn-direction-distance").text("");
+    $("#turn-direction-distance-units").text("");
+
+    // Total distance remaining
+    $("#navigation-distance-remaining").text("");
+    $("#navigation-distance-remaining-units").text("");
+
+    // total time remaining in minutes?
+    $("#navigation-time-remaining").text("");
+    $("#navigation-time-remaining-units").text("Thank you for using Scotty Maps");
+
+    $("#turn-direction-text").text("Arrived at Destination!");
 }

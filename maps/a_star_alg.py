@@ -143,6 +143,9 @@ def find_nearest_graph_location(graph, init_row, init_col):
 
 # convert the path into line segments for the front end to display. 
 def convert_path_to_line_segments(path):
+    if (len(path) < 2):
+        return []
+    
     vertices = [path[0]]
     curr_dir = (path[1][0] - path[0][0], path[1][1] - path[0][1])
 
@@ -199,7 +202,6 @@ def direction_of_turn(segments):
 
 
 # provide the navigation path and directions
-# TODO: finish implementing directions. 
 def navigation_directions(graph_path, user_row, user_col, dest_row, dest_col):
     a = time.time()
     graph = load_graph_from_json(graph_path)
