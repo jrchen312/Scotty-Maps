@@ -26,6 +26,12 @@ hh = Location.objects.get(id=2)
 ph_A = Floor(location=hh, name="Porter A", img_path="pha.png", graph_path="hha_graph.json", x_pixel_scale=299, y_pixel_scale=23, x_pixel_offset=166, y_pixel_offset=634)
 ph_A.save()
 
+
+from maps.models import *
+hh = Location.objects.get(id=2)
+roberts_3 = Floor(location=hh, name="Roberts 3", img_path="roberts3.png", graph_path="hha_graph.json", x_pixel_scale=660-143, y_pixel_scale=320-157, x_pixel_offset=143, y_pixel_offset=157)
+roberts_3.save()
+
 ################################################################################
 # NOTE: add new floors right above
 ################################################################################
