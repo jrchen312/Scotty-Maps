@@ -22,12 +22,13 @@ TAG_ID = "http_test"
 # 2: Test Square
 # 3: Hamerschlag A
 # 4: porter hall A
+# 5: ReH 3
 FLOOR_ID = 3
 
 WEBAPP_URI = f"ws://localhost:8000/ws/get_location/{FLOOR_ID}/{TAG_ID}/"
 
 # # url of webserver
-WEBAPP_URI = f"ws://3.90.105.209:8000/ws/get_location/{FLOOR_ID}/{TAG_ID}/"
+# WEBAPP_URI = f"ws://3.90.105.209:8000/ws/get_location/{FLOOR_ID}/{TAG_ID}/"
 
 
 # send update
@@ -62,8 +63,8 @@ async def main():
                     # y_pos = min(max(random.random(), 0), 1) # change me
                     rotation = random.random()*360          # change me
 
-                    y_pos = (y_pos+1) % 100
-                    # y_pos = min(100, y_pos+1)
+                    # y_pos = (y_pos+1) % 100
+                    y_pos = min(100, y_pos+1)
 
                     # for i in range(10):
                     time1 = time.time()

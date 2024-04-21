@@ -18,9 +18,15 @@ image_path = "hha.png"
 row_lines = [(153, 188, 153, 295), (432, 188, 432, 330)]
 col_lines = [(153, 188, 432, 188), (153, 295, 432, 295), (432, 330, 949, 330)]
 
+# simple ReH3 Right side graph
+image_path = "roberts3.png"
+name="roberts3"
+row_lines = [(168, 781, 168, 1140), (307, 781, 307, 1140)]
+col_lines = [(168, 781, 307, 781),  (168, 1140, 308, 1140)] # needed a +1 on one of the columns... why. 
+
 # TODO: Wiegand gym graph
 
-def img_2_graph(image_path):
+def img_2_graph(image_path, name):
     img = Image.open(image_path)
 
     # dimensions
@@ -44,7 +50,7 @@ def img_2_graph(image_path):
             graph[col[0]+dc][col[1]] = 0
 
     # save the graph
-    with open("graph.json", "w") as file:
+    with open(f"{name}.json", "w") as file:
         json.dump(graph, file) 
 
     # visualize the graph to make sure it's correct. 
@@ -56,8 +62,9 @@ def img_2_graph(image_path):
             color = "green" if graph[y][x] == 0 else "white" 
             draw.rectangle([x, y, x + 1, y + 1], fill=color)
 
-    image.save("graph2.png")
+    image.save(f"{name}_eg.png")
 
 
 if __name__ == "__main__":
-    img_2_graph(image_path)
+
+    img_2_graph(image_path, name)

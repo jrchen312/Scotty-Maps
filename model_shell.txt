@@ -21,6 +21,7 @@ hh_A = Floor(location=hh, name="Floor A", img_path="hha.png", graph_path="hha_gr
                 
 hh_A.save()
 
+# PHA hack (don't need anymore) 
 from maps.models import *
 hh = Location.objects.get(id=2)
 ph_A = Floor(location=hh, name="Porter A", img_path="pha.png", graph_path="hha_graph.json", x_pixel_scale=299, y_pixel_scale=23, x_pixel_offset=166, y_pixel_offset=634)
@@ -29,7 +30,9 @@ ph_A.save()
 
 from maps.models import *
 hh = Location.objects.get(id=2)
-roberts_3 = Floor(location=hh, name="Roberts 3", img_path="roberts3.png", graph_path="hha_graph.json", x_pixel_scale=660-143, y_pixel_scale=320-157, x_pixel_offset=143, y_pixel_offset=157)
+roberts_3 = Floor(location=hh, name="Roberts 3", img_path="roberts3.png", graph_path="roberts3_graph.json", 
+                  x_pixel_scale=660-143, y_pixel_scale=320-157, x_pixel_offset=143, y_pixel_offset=157,
+                  y_pixels_per_meter=16.138, x_pixels_per_meter=15.955)
 roberts_3.save()
 
 ################################################################################
@@ -42,7 +45,9 @@ import csv
 room_floors = dict()
 
 hh_A = Floor.objects.get(name = "Floor A")
+reh3 = Floor.objects.get(name = "Roberts 3")
 room_floors["hh_A"] = hh_A
+room_floors["reh3"] = reh
 
 with open("rooms.csv", "r") as file:
     csv_reader = csv.reader(file)
