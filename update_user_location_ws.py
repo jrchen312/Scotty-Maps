@@ -54,7 +54,7 @@ If the device gets disconnected from the websocket, just try connecting again.
 """
 async def main():
     y_pos = 0
-    x_pos = 0.5
+    x_pos = 0.05
     while True:
         try:
             async with websockets.connect(WEBAPP_URI) as websocket:

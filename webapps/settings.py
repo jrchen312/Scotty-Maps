@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'daphne',
     'maps',
     'a_star',
+    'widget_tweaks',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -129,6 +130,9 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+LOGIN_URL = "/login"
+LOGIN_REDIRECT_URL="/"
 
 
 # Daphne

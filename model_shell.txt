@@ -42,12 +42,19 @@ roberts_3.save()
 
 # open up rooms.csv and import the rooms. 
 import csv
+from maps.models import *
 room_floors = dict()
 
 hh_A = Floor.objects.get(name = "Floor A")
 reh3 = Floor.objects.get(name = "Roberts 3")
 room_floors["hh_A"] = hh_A
-room_floors["reh3"] = reh
+room_floors["reh3"] = reh3
+
+with open("reh3rooms.csv", "r") as file:
+    csv_reader = csv.reader(file)
+    for r in csv_reader:
+        room = Room(floor=room_floors[r[0]], name=r[1], x_pos=int(r[2]), y_pos=int(r[3]))
+        room.save()
 
 with open("rooms.csv", "r") as file:
     csv_reader = csv.reader(file)

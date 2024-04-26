@@ -1,0 +1,60 @@
+{% extends "maps/base.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block scripts %}
+<script>
+    function toggleOn() {
+        $("#id_name").removeAttr("readonly");
+        $("#id_name").removeAttr("disabled");
+        $("#id_tag_id").removeAttr("readonly");
+        $("#id_tag_id").removeAttr("disabled");
+
+        $("#toggleOnBtn").addClass("hidden");
+        $("#submitBtn").removeClass("hidden");
+    }
+</script>
+{% endblock %}
+
+{% block header %}
+{% include "maps/subtemplates/header.html" with page="profile" %}
+{% endblock %}
+
+{% load widget_tweaks %}
+
+{% block body %}
+<div class="container-sm">
+    <div class="my-3">
+        <div>
+            Hello {{ profile.name }}!
+        </div>
+        <div>
+            <a href="{% url 'logout' %}" class="btn btn-danger">Sign Out</a>
+        </div>
+    </div>
+
+    <form class="m-3" method="post" action="{% url 'profile' %}">
+        {% csrf_token %}
+
+        <div class="mb-3 row">
+            <label class="form-label" for="id_name">{{ form.name.label_tag }}</label>
+            {% render_field form.name|append_attr:"readonly disabled" class="form-control"  %}
+            {% include "maps/subtemplates/form_field.html" with field=form.name %}
+        </div>
+
+        <div class="mb-3 row">
+            <label class="form-label" for="id_tag_id">{{ form.tag_id.label_tag }}</label>
+            {% render_field form.tag_id|append_attr:"readonly disabled" class="form-control" %}
+            {% include "maps/subtemplates/form_field.html" with field=form.tag_id %}
+            {% if tag_id_wrong %}
+                <small class="form-text text-danger">The tag ID is invalid.</small>
+            {% endif %}
+        </div>
+
+        <button id="toggleOnBtn" class="btn btn-primary" type="button" onclick="toggleOn();">Edit</button>
+        <button id="submitBtn" class="btn btn-success hidden" type="submit" >Submit</button>
+    </form>
+
+</div>
+
+{% endblock %}

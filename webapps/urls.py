@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 import maps.views as map_views
+from django.contrib.auth import views as auth_views
 
 
 urlpatterns = [
@@ -25,6 +26,15 @@ urlpatterns = [
     # webapp pages:
     path('', map_views.home, name="home"),
     path('floor/<int:floor_id>', map_views.floor, name="floor"),
+    path('profile', map_views.profile, name="profile"),
+
+    # authentication:
+    # have log in and logout handled by the default django things... 
+    path('login', auth_views.LoginView.as_view(template_name="maps/login.html"), name="login"), 
+    path('logout', map_views.logout_user, name="logout"),
+
+    path('sign-up', map_views.sign_up, name="sign-up"),
+    path('password-reset', map_views.home, name="password_reset"),
 
     # endpoints: 
     path('get_maps_script', map_views.get_maps_script),

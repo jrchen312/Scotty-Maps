@@ -1,9 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt 
 from django.urls import reverse
 from .models import *
 from .a_star_alg import navigation_directions
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from .forms import SpecialUserCreationForm, ProfileEditForm
 
 import time
 import requests
@@ -14,13 +18,19 @@ from configparser import ConfigParser
 ################################################################################
 
 # Home View displaying a map
+@login_required
 def home(request):
     return render(request, "maps/home.html")
 
 
 # Floor View displaying a floor of a building. 
+@login_required
 def floor(request, floor_id):
     context = dict()
+    user_profile = request.user.profile
+
+    if ((not user_profile.tag_id) or (len(user_profile.tag_id) < 2)):
+        return redirect(profile)
 
     floor = Floor.objects.get(id=floor_id)
 
@@ -46,6 +56,67 @@ def floor(request, floor_id):
 
     return render(request, "maps/floor.html", context=context)
 
+
+# profile view
+@login_required
+def profile(request):
+    user = request.user
+    profile = user.profile
+
+    prof_form = ProfileEditForm(initial={
+        "name": profile.name,
+        "tag_id": profile.tag_id,
+    })
+
+    if (request.method == "POST"):
+        form = ProfileEditForm(request.POST)
+        if (form.is_valid()):
+
+            profile.name = form.cleaned_data["name"]
+            profile.tag_id = form.cleaned_data["tag_id"]
+            profile.save()
+            prof_form = ProfileEditForm(initial={
+                "name": profile.name,
+                "tag_id": profile.tag_id,
+            })
+        else:
+            prof_form = form;
+
+    context = {
+        "user": user,
+        "profile": profile,
+        "form": prof_form,
+        "tag_id_wrong": (not profile.tag_id) or (len(profile.tag_id) < 2)
+    }
+    return render(request, "maps/profile.html", context=context)
+
+
+# sign up
+def sign_up(request):
+    if (request.method == "POST"):
+        form = SpecialUserCreationForm(request.POST)
+        if (form.is_valid()):
+            # create the user
+            user, profile = form.save()
+
+            # create the associated profile
+            # profile = Profile(user=user, 
+            #                   tag_id="")
+            login(request=request, user=user)
+            return redirect(home)
+        else:
+            return render(request, "maps/sign_up.html", context={
+                "form": form,
+                "next": reverse("home"),
+            })
+    return render(request, "maps/sign_up.html", context={
+        "form": SpecialUserCreationForm(),
+        "next": reverse("home"),
+    })
+
+def logout_user(request):
+    logout(request)
+    return redirect(home)
 
 ################################################################################
 # Asynchronous points

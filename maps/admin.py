@@ -5,3 +5,4 @@ from .models import *
 admin.site.register(Location)
 admin.site.register(Floor)
 admin.site.register(Room)
+admin.site.register(Profile)

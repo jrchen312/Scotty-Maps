@@ -1,10 +1,15 @@
 from django.db import models
-# from django.contrib.auth.models import User
+from django.contrib.auth.models import User
 # Create your models here.
 
-# class Profile(models.Model):
-#     user            = models.OneToOneField(User, on_delete=models.PROTECT, related_name="profile")
-#     picture         = models.CharField(max_length=200) #holds a link to google url. 
+class Profile(models.Model):
+    user            = models.OneToOneField(User, on_delete=models.PROTECT, related_name="profile")
+
+    name            = models.CharField(max_length=100) # name of the user's profile :). 
+    tag_id          = models.CharField(max_length=200) # Effectively holds the ID of the tag (key of the tag)
+
+    def __str__(self):
+        return f"{self.name}"
 
 # Model for classes
 class Location(models.Model):
