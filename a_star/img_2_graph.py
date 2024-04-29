@@ -25,6 +25,44 @@ row_lines = [(168, 781, 168, 1140), (307, 781, 307, 1140)]
 col_lines = [(168, 781, 307, 781),  (168, 1140, 308, 1140)] # needed a +1 on one of the columns... why. 
 
 # TODO: Wiegand gym graph
+image_path = "wiegandv1.png"
+name = "wiegandv1"
+row_lines = [
+    (225, 398, 225, 1420), # top horizontal
+    (873, 398, 873, 859), # bottom horizontal one
+    (757, 859, 757, 1420), # bottom horizontal two
+    (577, 276, 577, 398), # left emergency exit
+]
+col_lines = [
+    (225, 398, 873, 398), # left vertical
+    (108, 870, 225, 870), # top vertical 1
+    (225, 904, 421, 904), # top vertical 2
+    (757, 859, 1057, 859), #bot vertical 1
+    (225, 1420, 757, 1420), #right vertical 
+]
+
+# Weigand Gym smaller map around the center
+image_path = "wiegandv1.png"
+name ='wiegand_small_v1'
+row_lines = [
+    (326, 490, 326, 1390), #top row
+    (390, 877, 390, 1000), #top-mid 1
+    (390, 1130, 390, 1235), #top-mid 2
+    (625, 872, 625, 1140), #bot-mid
+    (690, 490, 690, 873), #bot left
+    (662, 872, 662, 1390), #bot right
+]
+col_lines = [
+    (326, 490, 690, 490), #leftmost
+    (326, 877, 390, 877), #col 1
+    (326, 1000, 390, 1000), #col 2
+    (326, 1130, 390, 1130), #col 3
+    (326, 1235, 390, 1235), #col 4
+    (625, 872, 690, 872),   # col5
+    (625, 1140, 662, 1140), #col6
+    (326, 1390, 662, 1390), #rightmost
+]
+
 
 def img_2_graph(image_path, name):
     img = Image.open(image_path)
@@ -54,15 +92,18 @@ def img_2_graph(image_path, name):
         json.dump(graph, file) 
 
     # visualize the graph to make sure it's correct. 
-    image = Image.new('RGB', (width, height), color='white')
-    draw = ImageDraw.Draw(image)
+    # image = Image.new('RGB', (width, height), color='white')
+    # image = Image.open(image_path)
+    draw = ImageDraw.Draw(img)
 
     for y in range(len(graph)):
         for x in range(len(graph[y])):
-            color = "green" if graph[y][x] == 0 else "white" 
-            draw.rectangle([x, y, x + 1, y + 1], fill=color)
+            if graph[y][x] == 0:
+                draw.rectangle([x, y, x + 1, y + 1], fill="green")
+            # color = "green" if graph[y][x] == 0 else "white" 
+            
 
-    image.save(f"{name}_eg.png")
+    img.save(f"{name}_eg.png")
 
 
 if __name__ == "__main__":

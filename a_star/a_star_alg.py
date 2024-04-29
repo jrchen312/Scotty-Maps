@@ -143,6 +143,9 @@ def find_nearest_graph_location(graph, init_row, init_col):
 
 # convert the path into line segments for the front end to display. 
 def convert_path_to_line_segments(path):
+    if (len(path) < 2):
+        return []
+    
     vertices = [path[0]]
     curr_dir = (path[1][0] - path[0][0], path[1][1] - path[0][1])
 
@@ -150,7 +153,7 @@ def convert_path_to_line_segments(path):
         dir = (path[i][0] - path[i-1][0], path[i][1] - path[i-1][1])
         if (dir != curr_dir):
             curr_dir = dir
-            vertices.append(path[i])
+            vertices.append(path[i-1]) #ummmm
     vertices.append(path[-1])
 
     # now need to convert the vertices into line segments
@@ -163,6 +166,35 @@ def convert_path_to_line_segments(path):
     return segments
 
 
+# possibly provide the icon as well as the direction
+ARRIVED_ICON = '<i class="bi bi-pin-map-fill"></i>'
+ARRIVED_TEXT = "Arrive"
+TURN_LEFT_ICON = '<i class="bi bi-sign-turn-left"></i>'
+TURN_LEFT_TEXT = "Turn Left"
+TURN_RIGHT_ICON = '<i class="bi bi-sign-turn-right"></i>'
+TURN_RIGHT_TEXT = "Turn Right"
+
+def direction_of_turn(segments):
+    if (len(segments) <= 1):
+        return ARRIVED_TEXT, ARRIVED_ICON
+
+    v0 = (segments[0][2]-segments[0][0], segments[0][1]-segments[0][3])
+    v1 = (segments[1][2]-segments[1][0], segments[1][1]-segments[1][3])
+
+    print(v0, v1)
+    # vertical direction
+    if (v0[0] == 0):
+        if (v0[1] * v1[0] < 0):
+            return TURN_LEFT_TEXT, TURN_LEFT_ICON
+        else:
+            return TURN_RIGHT_TEXT, TURN_RIGHT_ICON
+    else:
+        if (v0[0] * v1[1] < 0):
+            return TURN_RIGHT_TEXT, TURN_RIGHT_ICON
+        else:
+            return TURN_LEFT_TEXT, TURN_LEFT_ICON
+
+
 # TESTBECH :3
 # def hh_A_example():
 #     graph = load_graph_from_json("hha_graph.json")
@@ -170,7 +202,6 @@ def convert_path_to_line_segments(path):
 
 
 # provide the navigation path and directions
-# TODO: finish implementing directions. 
 def navigation_directions(graph_path, user_row, user_col, dest_row, dest_col):
     a = time.time()
     graph = load_graph_from_json(graph_path)
@@ -182,10 +213,12 @@ def navigation_directions(graph_path, user_row, user_col, dest_row, dest_col):
 
     result = convert_path_to_line_segments(path)
 
+    icon, txt = direction_of_turn(result)
+
     b = time.time()
     print(f"time_elapsed({b-a})")
 
-    return result
+    return result, txt, icon
     # save_path_as_image(graph, path)
 
 
@@ -208,4 +241,24 @@ def navigation_directions(graph_path, user_row, user_col, dest_row, dest_col):
 # hh_A_example()
     
 if __name__ == "__main__":
-    navigation_directions("hha_graph.json", 933, 312, 177, 173)
+    # navigation_directions("hha_graph.json", 933, 312, 177, 173)
+    vectors = [
+        #going up
+        [(330, 901, 330, 432), (330, 432, 295, 432)], # left
+        [(330, 901, 330, 432), (330, 432, 500, 432)], # right
+
+        #going left
+        [(330, 432, 295, 432), (295, 432, 295, 500)], # left
+        [(330, 432, 295, 432), (295, 432, 295, 396)], # right
+
+        #going down
+        [(330, 432, 330, 901), (330, 901, 500, 901)], # left
+        [(330, 432, 330, 901), (330, 901, 200, 901)], # right
+
+        # going right
+        [(330, 432, 440, 432), (440, 432, 440, 100)], # left
+        [(330, 432, 440, 432), (440, 432, 440, 896)], # right
+    ]
+
+    for s in vectors:
+        direction_of_turn(s)

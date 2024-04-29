@@ -35,6 +35,19 @@ roberts_3 = Floor(location=hh, name="Roberts 3", img_path="roberts3.png", graph_
                   y_pixels_per_meter=16.138, x_pixels_per_meter=15.955)
 roberts_3.save()
 
+
+
+# Wiegand Gym
+from maps.models import *
+wiegand = Location(name="CUC", lat=40.4433567, lng=-79.9419179)
+wiegand.save()
+
+wiegand_floor = Floor(location=wiegand, name="Wiegand Gym", img_path="wiegandv1.png", graph_path="wiegand_small_v1.json", 
+                x_pixel_scale=1460-274, y_pixel_scale=1057-101, 
+                x_pixel_offset=274, y_pixel_offset=101,
+                x_pixels_per_meter=30.1, y_pixels_per_meter=30.1)
+wiegand_floor.save()
+
 ################################################################################
 # NOTE: add new floors right above
 ################################################################################

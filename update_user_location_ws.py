@@ -28,7 +28,7 @@ FLOOR_ID = 3
 WEBAPP_URI = f"ws://localhost:8000/ws/get_location/{FLOOR_ID}/{TAG_ID}/"
 
 # # url of webserver
-# WEBAPP_URI = f"ws://3.90.105.209:8000/ws/get_location/{FLOOR_ID}/{TAG_ID}/"
+WEBAPP_URI = f"ws://3.90.105.209:8000/ws/get_location/{FLOOR_ID}/{TAG_ID}/"
 
 
 # send update
