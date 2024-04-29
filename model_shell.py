@@ -48,6 +48,17 @@ wiegand_floor = Floor(location=wiegand, name="Wiegand Gym", img_path="wiegandv1.
                 x_pixels_per_meter=30.1, y_pixels_per_meter=30.1)
 wiegand_floor.save()
 
+
+# Wiegand Gym, downscaled
+from maps.models import *
+wiegand = Location.objects.get(id=3)
+
+wiegand_floor_small = Floor(location=wiegand, name="Wiegand Gym Downscaled", img_path="wiegandv2.png", graph_path="wiegand_small_v2.json", #todo
+                x_pixel_scale=730-137, y_pixel_scale=528-51, 
+                x_pixel_offset=137, y_pixel_offset=51,
+                x_pixels_per_meter=15.05, y_pixels_per_meter=15.05)
+wiegand_floor_small.save()
+
 ################################################################################
 # NOTE: add new floors right above
 ################################################################################

@@ -23,7 +23,8 @@ TAG_ID = "http_test"
 # 3: Hamerschlag A
 # 4: porter hall A
 # 5: ReH 3
-FLOOR_ID = 3
+# 6: Wiegand Gym
+FLOOR_ID = 6
 
 WEBAPP_URI = f"ws://localhost:8000/ws/get_location/{FLOOR_ID}/{TAG_ID}/"
 
@@ -73,7 +74,7 @@ async def main():
                     time2 = time.time()
 
                     print(f"Time required: {time2-time1}")
-                    time.sleep(0.1)
+                    time.sleep(0.4)
 
         except Exception as e:
             print(e)
