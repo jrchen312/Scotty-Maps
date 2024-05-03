@@ -24,12 +24,14 @@ TAG_ID = "http_test"
 # 4: porter hall A
 # 5: ReH 3
 # 6: Wiegand Gym
-FLOOR_ID = 6
+# 7: Wiegand Gym Outer
+# 8: Wiegand Gyme Inner
+FLOOR_ID = 7
 
 WEBAPP_URI = f"ws://localhost:8000/ws/get_location/{FLOOR_ID}/{TAG_ID}/"
 
 # # url of webserver
-WEBAPP_URI = f"ws://3.90.105.209:8000/ws/get_location/{FLOOR_ID}/{TAG_ID}/"
+# WEBAPP_URI = f"ws://3.90.105.209:8000/ws/get_location/{FLOOR_ID}/{TAG_ID}/"
 
 
 # send update
@@ -54,8 +56,13 @@ Main sequence of events to send to the server
 If the device gets disconnected from the websocket, just try connecting again.
 """
 async def main():
-    y_pos = 0
-    x_pos = 0.05
+    # testing wiegand gym inner
+    y_pos = 0.25
+    x_pos = 0.3
+
+    # testing wiegand gym outer
+    x_pos = 0.15
+    y_pos = 0.33
     while True:
         try:
             async with websockets.connect(WEBAPP_URI) as websocket:
@@ -65,12 +72,12 @@ async def main():
                     rotation = random.random()*360          # change me
 
                     # y_pos = (y_pos+1) % 100
-                    y_pos = min(100, y_pos+1)
+                    # y_pos = min(100, y_pos+1)
 
                     # for i in range(10):
                     time1 = time.time()
 
-                    await update_user_position(websocket, time1, x_pos, 1-(y_pos/100), rotation)
+                    await update_user_position(websocket, time1, x_pos, y_pos, rotation)
                     time2 = time.time()
 
                     print(f"Time required: {time2-time1}")

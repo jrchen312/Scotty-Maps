@@ -7,6 +7,7 @@ let timeout_id = null;
 const TIME_OUT_TIME = 4000; // trigger timeout after x milliseconds
 
 const NEXT_DIRECTION_DISTANCE = 2; // Get the next set of directions if within x meters
+const REDIRECT_DISTANCE = 5;
 const WALKING_SPEED = 1; // walking speed in meters per second. 
 
 // rotation: degree (0 is upwards, 90 is right, 270 is left)
@@ -306,8 +307,8 @@ function realign_paths(width, height) {
 
         // Secondly, if we are still too far away, then call for new navigation
         // paths...
-        console.log(`distance(${distance})`);
-        if (distance > 50) {
+        console.log(`distance(${distance}, ${floorScaling.x_pixels_per_meter})`);
+        if (distance > (REDIRECT_DISTANCE * floorScaling.x_pixels_per_meter)) {
             submitFormAJAX(width, height);
         }
 

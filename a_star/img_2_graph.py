@@ -17,51 +17,68 @@ col_lines = [(227, 311, 1088, 311), (227, 781, 1088, 781)]
 image_path = "hha.png"
 row_lines = [(153, 188, 153, 295), (432, 188, 432, 330)]
 col_lines = [(153, 188, 432, 188), (153, 295, 432, 295), (432, 330, 949, 330)]
+name = "hha"
 
-# simple ReH3 Right side graph
-image_path = "roberts3.png"
-name="roberts3"
-row_lines = [(168, 781, 168, 1140), (307, 781, 307, 1140)]
-col_lines = [(168, 781, 307, 781),  (168, 1140, 308, 1140)] # needed a +1 on one of the columns... why. 
+# # simple ReH3 Right side graph
+# image_path = "roberts3.png"
+# name="roberts3"
+# row_lines = [(168, 781, 168, 1140), (307, 781, 307, 1140)]
+# col_lines = [(168, 781, 307, 781),  (168, 1140, 308, 1140)] # needed a +1 on one of the columns... why. 
 
 # TODO: Wiegand gym graph
-image_path = "wiegandv1.png"
-name = "wiegandv1"
+image_path = "wiegandv3.png"
+name = "wiegandv3"
 row_lines = [
-    (225, 398, 225, 1420), # top horizontal
-    (873, 398, 873, 859), # bottom horizontal one
-    (757, 859, 757, 1420), # bottom horizontal two
-    (577, 276, 577, 398), # left emergency exit
+    [225, 398, 225, 1420], # top horizontal
+    [873, 398, 873, 859], # bottom horizontal one
+    [757, 859, 757, 1421], # bottom horizontal two
+    [577, 276, 577, 398], # left emergency exit
 ]
 col_lines = [
-    (225, 398, 873, 398), # left vertical
-    (108, 870, 225, 870), # top vertical 1
-    (225, 904, 421, 904), # top vertical 2
-    (757, 859, 1057, 859), #bot vertical 1
-    (225, 1420, 757, 1420), #right vertical 
+    [225, 398, 873, 398], # left vertical
+    [108, 870, 225, 870], # top vertical 1
+    [225, 904, 390, 904], # top vertical 2
+    [757, 859, 1057, 859], #bot vertical 1
+    [225, 1420, 757, 1420], #right vertical 
 ]
 
-# Weigand Gym smaller map around the center
-image_path = "wiegandv1.png"
-name ='wiegand_small_v1'
-row_lines = [
-    (326, 490, 326, 1390), #top row
-    (390, 877, 390, 1000), #top-mid 1
-    (390, 1130, 390, 1235), #top-mid 2
-    (625, 872, 625, 1140), #bot-mid
-    (690, 490, 690, 873), #bot left
-    (662, 872, 662, 1390), #bot right
-]
-col_lines = [
-    (326, 490, 690, 490), #leftmost
-    (326, 877, 390, 877), #col 1
-    (326, 1000, 390, 1000), #col 2
-    (326, 1130, 390, 1130), #col 3
-    (326, 1235, 390, 1235), #col 4
-    (625, 872, 690, 872),   # col5
-    (625, 1140, 662, 1140), #col6
-    (326, 1390, 662, 1390), #rightmost
-]
+# moving the image to the top left
+x_pixel_offset = 90
+y_pixel_offset = 30
+
+for row in row_lines:
+    row[0] -= y_pixel_offset
+    row[1] -= x_pixel_offset
+    row[2] -= y_pixel_offset
+    row[3] -= x_pixel_offset
+
+for col in col_lines:
+    col[0] -= y_pixel_offset
+    col[1] -= x_pixel_offset
+    col[2] -= y_pixel_offset
+    col[3] -= x_pixel_offset
+
+
+
+# # # Weigand Gym smaller map around the center
+# image_path = "wiegandv3.png"
+# name ='wiegand_small_v3'
+# row_lines = [
+#     [288, 390, 288, 776], #top one
+#     [338, 776, 388, 1304], #top two
+#     [668, 390, 668, 777], # bttom one
+#     [610, 776, 610, 1305], #bttom two
+# ]
+
+# col_lines = [
+#     [288, 390, 668, 390], # left
+#     [288, 776, 338, 776], #middle one
+#     [610, 776, 668, 776], # middle two
+#     [338, 1304, 610, 1304], # right
+# ]
+
+
+
 
 
 def img_2_graph(image_path, name):
@@ -99,7 +116,7 @@ def img_2_graph(image_path, name):
     for y in range(len(graph)):
         for x in range(len(graph[y])):
             if graph[y][x] == 0:
-                draw.rectangle([x, y, x + 1, y + 1], fill="green")
+                draw.rectangle([x, y, x + 1, y + 1], fill="red")
             # color = "green" if graph[y][x] == 0 else "white" 
             
 
